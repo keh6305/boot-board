@@ -3,4 +3,4 @@
 <br/>
 java, spring boot, MYSQL
 <br/>
-bootstrap, HTML5, CSS
+bootstrap, HTML, CSS

@@ -1,7 +1,5 @@
 package com.bootBoard.config.security;
 
-import com.dnmaison.admin.entity.Admin;
-import com.dnmaison.admin.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,23 +16,24 @@ public class CustomAuthenticationProvider implements AuthenticationProvider
 	@Autowired @Lazy
 	private PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private LoginService loginService;
+//	@Autowired
+//	private LoginService loginService;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException
 	{
-		Admin admin = (Admin) loginService.loadUserByUsername(authentication.getName());
+//		Admin admin = (Admin) loginService.loadUserByUsername(authentication.getName());
 
-		if (!passwordEncoder.matches(authentication.getCredentials().toString(), admin.getPassword()))
-		{
-			throw new BadCredentialsException("비밀번호가 일치하지 않습니다");
-		}
-		else
-		{
-			return new UsernamePasswordAuthenticationToken(admin, null, admin.getAuthorities());
-		}
+//		if (!passwordEncoder.matches(authentication.getCredentials().toString(), admin.getPassword()))
+//		{
+//			throw new BadCredentialsException("비밀번호가 일치하지 않습니다");
+//		}
+//		else
+//		{
+//			return new UsernamePasswordAuthenticationToken(admin, null, admin.getAuthorities());
+//		}
 
+		return authentication;
 	}
 
 	@Override

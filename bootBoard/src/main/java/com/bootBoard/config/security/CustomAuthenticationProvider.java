@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -16,23 +17,27 @@ import org.springframework.stereotype.Component;
 public class CustomAuthenticationProvider implements AuthenticationProvider
 {
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private LoginService service;
 
-	private LoginService loginService;
+	@Autowired @Lazy
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException
 	{
-		User user = (User) loginService.loadUserByUsername(authentication.getName());
+		User user = (User)service.loadUserByUsername(authentication.getName());
 
-		if (!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword()))
+		if(user == null)
 		{
-			throw new BadCredentialsException("비밀번호가 일치하지 않습니다");
+			throw new UsernameNotFoundException("해당 아이디가 없습니다.");
 		}
-		else
+
+		if(!passwordEncoder.matches(authentication.getCredentials().toString(), user.getUser_login_pw()) || user == null)
 		{
-			return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+			throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
 		}
+
+		return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 	}
 
 	@Override

@@ -23,6 +23,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 			returnUrl = returnUrlParam;
 		
 		String errMsg = "";
+		
 		if (exception instanceof UsernameNotFoundException)
 		{
 			errMsg = "userID";

@@ -22,7 +22,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		HttpSession session = request.getSession();
 		
 		session.setAttribute("login", true);
-		session.setAttribute("admin_login_id", authentication.getName());
+		session.setAttribute("user_login_id", authentication.getName());
 		session.setMaxInactiveInterval(3600 * 24);
 		
 		response.setStatus(200);

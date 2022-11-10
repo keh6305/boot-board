@@ -18,7 +18,7 @@ public class IndexController
         return mv;
     }
 
-    @GetMapping("/index")
+    @RequestMapping("/index")
     public ModelAndView index(ModelAndView mv)
     {
         mv.setViewName("index/index");

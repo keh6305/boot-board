@@ -28,8 +28,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		response.setStatus(200);
 //		response.getWriter().print(defaultUrl);
 //		response.getWriter().flush();
-		
-		response.sendRedirect(request.getContextPath() + defaultUrl);		
+
+		response.sendRedirect(request.getContextPath() + defaultUrl);
 	}
 
 	public void setDefaultUrl(String defaultUrl)

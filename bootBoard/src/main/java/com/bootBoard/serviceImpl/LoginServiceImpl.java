@@ -17,9 +17,7 @@ public class LoginServiceImpl implements LoginService
     @Override
     public User loadUserByUsername(String user_login_id)
     {
-        System.out.println("user_login_id = " + user_login_id);
         User user = loginMapper.loadUserByUsername(user_login_id);
-        System.out.println("user service = " + user);
 
         return user;
     }

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bootBoard.mapper.UserMapper">
+    <select id="selectUserCount" resultType="int">
+        SELECT COUNT(*) FROM user
+        <where>
+            <if test="user_type != 0">
+                user_type = #{user_type}
+            </if>
+            <if test="user_type != 0">
+                user_type = #{user_type}
+            </if>
+            <if test="keyword != ''">
+                <choose>
+                    <when test="keytype == 0">
+                        user_id LIKE CONCAT ('%', #{user_id}, '%') OR
+                        user_login_id LIKE CONCAT ('%', #{user_login_id}, '%') OR
+                        user_name LIKE CONCAT ('%', #{user_name}, '%') OR
+                        user_nickname LIKE CONCAT ('%', #{user_nickname}, '%')
+                    </when>
+                    <when test="keytype == 1">
+                        user_id LIKE CONCAT ('%', #{user_id}, '%')
+                    </when>
+                    <when test="keytype == 2">
+                        user_login_id LIKE CONCAT ('%', #{user_login_id}, '%')
+                    </when>
+                    <when test="keytype == 3">
+                        user_name LIKE CONCAT ('%', #{user_name}, '%')
+                    </when>
+                    <when test="keytype == 4">
+                        user_nickname LIKE CONCAT ('%', #{user_nickname}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUserList" resultType="UserDto">
+        SELECT * FROM user
+        <where>
+            <if test="user_type != 0">
+                user_type = #{user_type}
+            </if>
+            <if test="user_type != 0">
+                user_type = #{user_type}
+            </if>
+            <if test="keyword != ''">
+                <choose>
+                    <when test="keytype == 0">
+                        user_id LIKE CONCAT ('%', #{user_id}, '%') OR
+                        user_login_id LIKE CONCAT ('%', #{user_login_id}, '%') OR
+                        user_name LIKE CONCAT ('%', #{user_name}, '%') OR
+                        user_nickname LIKE CONCAT ('%', #{user_nickname}, '%')
+                    </when>
+                    <when test="keytype == 1">
+                        user_id LIKE CONCAT ('%', #{user_id}, '%')
+                    </when>
+                    <when test="keytype == 2">
+                        user_login_id LIKE CONCAT ('%', #{user_login_id}, '%')
+                    </when>
+                    <when test="keytype == 3">
+                        user_name LIKE CONCAT ('%', #{user_name}, '%')
+                    </when>
+                    <when test="keytype == 4">
+                        user_nickname LIKE CONCAT ('%', #{user_nickname}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY user_id DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+</mapper>

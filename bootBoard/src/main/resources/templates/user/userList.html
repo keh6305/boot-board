@@ -50,47 +50,44 @@
 											<table class="table table-bordered" style="width: 100%; cellspacing: '0'; margin: auto;">
 												<tbody>
 												<tr>
-													<td>유저 아이디</td>
+													<td>회원 유형</td>
 													<td>
-														<input type="text" class="form-control" id="user_email" style="width: 500px;">
+														<input type="radio" id="type1" name="user_type" value="0">
+														<label for="type1">전체</label>
+														<input type="radio" id="type2" name="user_type" value="1">
+														<label for="type2">최고 관리자</label>
+														<input type="radio" id="type3" name="user_type" value="2">
+														<label for="type3">관리자</label>
+														<input type="radio" id="type4" name="user_type" value="3">
+														<label for="type4">회원</label>
 													</td>
 												</tr>
 												<tr>
-													<td>유저 닉네임</td>
+													<td>회원 상태</td>
 													<td>
-														<input type="text" class="form-control" id="user_nickname" style="width: 500px;">
+														<input type="radio" id="status1" name="user_status" value="0">
+														<label for="status1">전체</label>
+														<input type="radio" id="status2" name="user_status" value="1">
+														<label for="status2">일반</label>
+														<input type="radio" id="status3" name="user_status" value="2">
+														<label for="status3">대기</label>
+														<input type="radio" id="status4" name="user_status" value="3">
+														<label for="status4">정지</label>
+														<input type="radio" id="status5" name="user_status" value="4">
+														<label for="status5">탈퇴</label>
 													</td>
 												</tr>
 												<tr>
-													<td>검색 유형</td>
+													<td>검색어</td>
 													<td>
-														<span>
-															<select class="form-control" id="user_united" style="width: 150px;">
-																<option value="99">회원유형</option>
-																<option value="0">일반</option>
-																<option value="1">카카오</option>
-																<option value="2">구글</option>
-																<option value="3">네이버</option>
-															</select>
-														</span>
-														<span>
-															<select class="form-control" id="user_join_path" style="width: 150px;">
-																<option value="0">회원가입 계기</option>
-																<option value="1">지인추천</option>
-																<option value="2">인터넷 검색</option>
-																<option value="3">방송시청</option>
-																<option value="4">기타</option>
-															</select>
-														</span>
-														<span>
-															<select class="form-control" id="user_status" style="width: 150px;">
-																<option value="0">상태</option>
-																<option value="1">정상</option>
-																<option value="2">제제</option>
-																<option value="3">탈퇴</option>
-																<option value="4">강제탈퇴</option>
-															</select>
-														</span>
+														<select class="form-control" id="keytype" style="width: 150px;">
+															<option value="0">전체</option>
+															<option value="1">번호</option>
+															<option value="2">아이디</option>
+															<option value="3">이름</option>
+															<option value="4">닉네임</option>
+														</select>
+														<input type="text" class="form-control" id="keyword" style="width: 500px;">
 													</td>
 												</tr>
 												</tbody>
@@ -156,130 +153,131 @@
 		SearchBtn(1);
 	});
 
-	function SearchBtn(e) {
+	function SearchBtn(e)
+	{
 		var data = {'user_email': $("#user_email").val(), 'user_nickname': $("#user_nickname").val(), 'user_united': $("#user_united").val(), 'user_join_path': $("#user_join_path").val(), 'user_status': $("#user_status").val(), 'page_num': e};
-		console.log(data);
+
 		$.ajax(
-				{
-					url: '/user/selectNewUser',
-					method: 'POST',
-					dataType : 'json',
-					data : data,
-					success: function (result) {
-						console.log(result);
-						var item_list = $("#item_list");
-						var item_add = "";
-						var page_list = $("#page_list");
-						var page_add = "";
-						// list start
-						if (result.user.length == 0) {
-							item_add += '<tr>';
-							item_add += '<td></td>';
-							item_add += '<td></td>';
-							item_add += '<td></td>';
-							item_add += '<td></td>';
-							item_add += '<td></td>';
-							item_add += '<td></td>';
-							item_add += '<td></td>';
-							item_add += '<td></td>';
-							item_add += '<td></td>';
-							item_add += '<td></td>';
-							item_add += '<td></td>';
-							item_add += '</tr>';
-						} else {
-							for (var i = 0; i < result.user.length; i++) {
-								item_add += '<tr>';
+		{
+			url: '/user/selectNewUser',
+			method: 'POST',
+			dataType : 'json',
+			data : data,
+			success: function (result) {
+				console.log(result);
+				var item_list = $("#item_list");
+				var item_add = "";
+				var page_list = $("#page_list");
+				var page_add = "";
+				// list start
+				if (result.user.length == 0) {
+					item_add += '<tr>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '</tr>';
+				} else {
+					for (var i = 0; i < result.user.length; i++) {
+						item_add += '<tr>';
 
-								if (result.user[i].user_united == 0)
-								{
-									item_add += '<td>일반</td>';
-								}
-								else if (result.user[i].user_united == 1)
-								{
-									item_add += '<td>카카오</td>';
-								}
-								else if (result.user[i].user_united == 2)
-								{
-									item_add += '<td>구글</td>';
-								}
-								else if (result.user[i].user_united == 3)
-								{
-									item_add += '<td>네이버</td>';
-								}
-
-								item_add += '<td>' + result.user[i].user_email + '</td>';
-								item_add += '<td>' + result.user[i].user_nickname + '</td>';
-
-								if (result.user[i].user_join_path == 1)
-								{
-									item_add += '<td>지인추천</td>';
-								}
-								else if (result.user[i].user_join_path == 2)
-								{
-									item_add += '<td>인터넷 검색</td>';
-								}
-								else if (result.user[i].user_join_path == 3)
-								{
-									item_add += '<td>방송시청</td>';
-								}
-								else if (result.user[i].user_join_path == 4)
-								{
-									item_add += '<td>기타</td>';
-								}
-
-								item_add += '<td><a href="/user/replyList?user_id='+(result.user[i].user_id)+'">' + result.user[i].reply_count + '</a></td>';
-								item_add += '<td><a href="/chat/chatRoomList?user_id='+(result.user[i].user_id)+'">' + result.user[i].chat_count + '</a></td>';
-
-								if (result.user[i].user_status == 1)
-								{
-									item_add += '<td>정상</td>';
-								}
-								else if (result.user[i].user_status == 2)
-								{
-									item_add += '<td>제제</td>';
-								}
-								else if (result.user[i].user_status == 3)
-								{
-									item_add += '<td>탙뢰</td>';
-								}
-								else if (result.user[i].user_status == 4)
-								{
-									item_add += '<td>강제탈퇴</td>';
-								}
-
-								item_add += '<td>' + result.user[i].user_modify_date + '</td>';
-								item_add += '<td>' + result.user[i].user_create_date + '</td>';
-
-								item_add += '<td>' + '<a href="/user/detailUsers?user_id=' + result.user[i].user_id + '"><button class="btn btn-sm btn-primary">세부사항</button></a>' + '</td>';
-								item_add += '<td>' + '<a href="/user/changeAgency?user_id=' + result.user[i].user_id + '"><button class="btn btn-sm btn-primary">등록</button></a>' + '</td>';
-								item_add += '</tr>';
-							}
+						if (result.user[i].user_united == 0)
+						{
+							item_add += '<td>일반</td>';
 						}
-						// list end
-						// paging start
-						if (result.page.page_num > 10) {
-							page_add += '<button class="paging" onclick="SearchBtn(' + (result.page.start_page - 10) + ')"><</button>';
+						else if (result.user[i].user_united == 1)
+						{
+							item_add += '<td>카카오</td>';
 						}
-						for (var i = result.page.start_page; i < (result.page.end_page + 1); i++) {
-							if (result.page.page_num == i) {
-								page_add += '<button class="current" onclick="SearchBtn(' + i + ')">' + i + '</button>';
-							} else if (i <= result.page.max_page) {
-								page_add += '<button class="paging" onclick="SearchBtn(' + i + ')">' + i + '</button>';
-							}
+						else if (result.user[i].user_united == 2)
+						{
+							item_add += '<td>구글</td>';
 						}
-						if (result.page.start_page + 10 < (result.page.max_page)) {
-							page_add += '<button class="paging" onclick="SearchBtn(' + (result.page.start_page + 10) + ')">></button>';
+						else if (result.user[i].user_united == 3)
+						{
+							item_add += '<td>네이버</td>';
 						}
-						// paging end
-						item_list.empty();
-						item_list.append(item_add);
-						page_list.empty();
-						page_list.append(page_add);
-					},
-					error(e) {
-						console.log(e);
+
+						item_add += '<td>' + result.user[i].user_email + '</td>';
+						item_add += '<td>' + result.user[i].user_nickname + '</td>';
+
+						if (result.user[i].user_join_path == 1)
+						{
+							item_add += '<td>지인추천</td>';
+						}
+						else if (result.user[i].user_join_path == 2)
+						{
+							item_add += '<td>인터넷 검색</td>';
+						}
+						else if (result.user[i].user_join_path == 3)
+						{
+							item_add += '<td>방송시청</td>';
+						}
+						else if (result.user[i].user_join_path == 4)
+						{
+							item_add += '<td>기타</td>';
+						}
+
+						item_add += '<td><a href="/user/replyList?user_id='+(result.user[i].user_id)+'">' + result.user[i].reply_count + '</a></td>';
+						item_add += '<td><a href="/chat/chatRoomList?user_id='+(result.user[i].user_id)+'">' + result.user[i].chat_count + '</a></td>';
+
+						if (result.user[i].user_status == 1)
+						{
+							item_add += '<td>정상</td>';
+						}
+						else if (result.user[i].user_status == 2)
+						{
+							item_add += '<td>제제</td>';
+						}
+						else if (result.user[i].user_status == 3)
+						{
+							item_add += '<td>탙뢰</td>';
+						}
+						else if (result.user[i].user_status == 4)
+						{
+							item_add += '<td>강제탈퇴</td>';
+						}
+
+						item_add += '<td>' + result.user[i].user_modify_date + '</td>';
+						item_add += '<td>' + result.user[i].user_create_date + '</td>';
+
+						item_add += '<td>' + '<a href="/user/detailUsers?user_id=' + result.user[i].user_id + '"><button class="btn btn-sm btn-primary">세부사항</button></a>' + '</td>';
+						item_add += '<td>' + '<a href="/user/changeAgency?user_id=' + result.user[i].user_id + '"><button class="btn btn-sm btn-primary">등록</button></a>' + '</td>';
+						item_add += '</tr>';
 					}
-				})
+				}
+				// list end
+				// paging start
+				if (result.page.page_num > 10) {
+					page_add += '<button class="paging" onclick="SearchBtn(' + (result.page.start_page - 10) + ')"><</button>';
+				}
+				for (var i = result.page.start_page; i < (result.page.end_page + 1); i++) {
+					if (result.page.page_num == i) {
+						page_add += '<button class="current" onclick="SearchBtn(' + i + ')">' + i + '</button>';
+					} else if (i <= result.page.max_page) {
+						page_add += '<button class="paging" onclick="SearchBtn(' + i + ')">' + i + '</button>';
+					}
+				}
+				if (result.page.start_page + 10 < (result.page.max_page)) {
+					page_add += '<button class="paging" onclick="SearchBtn(' + (result.page.start_page + 10) + ')">></button>';
+				}
+				// paging end
+				item_list.empty();
+				item_list.append(item_add);
+				page_list.empty();
+				page_list.append(page_add);
+			},
+			error(e) {
+				console.log(e);
+			}
+		})
 	}
 
 </script>

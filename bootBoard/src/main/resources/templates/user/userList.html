@@ -52,7 +52,7 @@
 												<tr>
 													<td>회원 유형</td>
 													<td>
-														<input type="radio" id="type1" name="user_type" value="0">
+														<input type="radio" id="type1" name="user_type" value="0" checked="checked">
 														<label for="type1">전체</label>
 														<input type="radio" id="type2" name="user_type" value="1">
 														<label for="type2">최고 관리자</label>
@@ -65,7 +65,7 @@
 												<tr>
 													<td>회원 상태</td>
 													<td>
-														<input type="radio" id="status1" name="user_status" value="0">
+														<input type="radio" id="status1" name="user_status" value="0" checked="checked">
 														<label for="status1">전체</label>
 														<input type="radio" id="status2" name="user_status" value="1">
 														<label for="status2">일반</label>
@@ -155,15 +155,16 @@
 
 	function SearchBtn(e)
 	{
-		var data = {'user_email': $("#user_email").val(), 'user_nickname': $("#user_nickname").val(), 'user_united': $("#user_united").val(), 'user_join_path': $("#user_join_path").val(), 'user_status': $("#user_status").val(), 'page_num': e};
+		var data = {'user_type': $('input:radio[name="user_type"]:checked').val(), 'user_status': $('input:radio[name="user_status"]:checked').val(), 'keytype': $("#keytype").val(), 'keyword': $("#keyword").val(), 'page_num': e};
 
 		$.ajax(
 		{
-			url: '/user/selectNewUser',
+			url: '/user/search',
 			method: 'POST',
 			dataType : 'json',
 			data : data,
-			success: function (result) {
+			success: function (result)
+			{
 				console.log(result);
 				var item_list = $("#item_list");
 				var item_add = "";

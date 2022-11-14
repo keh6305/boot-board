@@ -4,13 +4,14 @@
     <select id="selectUserCount" resultType="int">
         SELECT COUNT(*) FROM user
         <where>
-            <if test="user_type != 0">
-                user_type = #{user_type}
+            <if test="user_type != 99">
+                AND user_type = #{user_type}
             </if>
-            <if test="user_type != 0">
-                user_type = #{user_type}
+            <if test="user_status != 99">
+                AND user_status = #{user_status}
             </if>
             <if test="keyword != ''">
+                AND
                 <choose>
                     <when test="keytype == 0">
                         user_id LIKE CONCAT ('%', #{user_id}, '%') OR
@@ -38,13 +39,14 @@
     <select id="selectUserList" resultType="UserDto">
         SELECT * FROM user
         <where>
-            <if test="user_type != 0">
-                user_type = #{user_type}
+            <if test="user_type != 99">
+               AND user_type = #{user_type}
             </if>
-            <if test="user_type != 0">
-                user_type = #{user_type}
+            <if test="user_status != 99">
+                AND user_status = #{user_status}
             </if>
             <if test="keyword != ''">
+                AND
                 <choose>
                     <when test="keytype == 0">
                         user_id LIKE CONCAT ('%', #{user_id}, '%') OR

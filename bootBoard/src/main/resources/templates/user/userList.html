@@ -165,8 +165,6 @@
 			data : data,
 			success: function (result)
 			{
-				console.log(result);
-
 				var item_list = $("#item_list");
 				var item_add = "";
 				var page_list = $("#page_list");
@@ -265,12 +263,12 @@
 				page_list.empty();
 				page_list.append(page_add);
 			},
-			error(e) {
+			error(e)
+			{
 				console.log(e);
 			}
 		})
 	}
-
 </script>
 </body>
 </html>

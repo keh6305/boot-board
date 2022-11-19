@@ -12,4 +12,6 @@ public interface UserMapper
     int selectUserCount(@Param("user_type") int user_type, @Param("user_status") int user_status, @Param("keytype") int keytype, @Param("keyword") String keyword);
 
     List<UserDto> selectUserList(@Param("user_type") int user_type, @Param("user_status") int user_status, @Param("keytype") int keytype, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit);
+
+    UserDto selectUser(int user_id);
 }

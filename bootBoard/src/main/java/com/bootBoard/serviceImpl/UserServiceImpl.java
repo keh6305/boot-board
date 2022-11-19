@@ -46,4 +46,10 @@ public class UserServiceImpl implements UserService
 
         return result;
     }
+
+    @Override
+    public UserDto selectUser(int user_id)
+    {
+        return userMapper.selectUser(user_id);
+    }
 }

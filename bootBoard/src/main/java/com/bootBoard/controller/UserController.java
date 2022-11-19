@@ -1,12 +1,10 @@
 package com.bootBoard.controller;
 
+import com.bootBoard.dto.UserDto;
 import com.bootBoard.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
@@ -33,5 +31,18 @@ public class UserController
         Map<String, Object> result = userService.userSearch(user_type, user_status, keytype, keyword, page_num, limit);
 
         return result;
+    }
+
+    @RequestMapping("/detail/{user_id}")
+    public ModelAndView userDetail(ModelAndView mv, @PathVariable("user_id") int user_id)
+    {
+        UserDto user = userService.selectUser(user_id);
+        System.out.println("user = " + user);
+
+        mv.addObject("user", user);
+
+        mv.setViewName("user/userDetail");
+
+        return mv;
     }
 }

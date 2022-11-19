@@ -72,4 +72,9 @@
         ORDER BY user_id DESC
         LIMIT #{offset}, #{limit}
     </select>
+
+    <select id="selectUser" parameterType="int" resultType="UserDto">
+        SELECT * FROM user
+        WHERE user_id = #{user_id}
+    </select>
 </mapper>

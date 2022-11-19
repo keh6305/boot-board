@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user=${#authentication.principal}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Boot Board</title>
+    <link rel="stylesheet" href="/../assets/vendors/iconfonts/mdi/css/materialdesignicons.css">
+    <link rel="stylesheet" href="/../assets/css/shared/style.css">
+    <link rel="stylesheet" href="/../assets/css/demo_1/style.css">
+    <link rel="shortcut icon" href="/../asssets/images/favicon.ico"/>
+</head>
+<body class="header-fixed">
+<!-- partial:partials/_header.html -->
+<th:block th:include="/../common/header.html"></th:block>
+<!-- partial -->
+<div class="page-body">
+    <!-- partial:partials/_sidebar.html -->
+    <th:block th:include="/../common/sidebar.html"></th:block>
+    <!-- partial -->
+    <div class="page-content-wrapper">
+        <div class="page-content-wrapper-inner">
+            <div id="content-viewport">
+                <!-- Begin Page Content -->
+                <div class="row">
+                    <div class="col-12" style="margin-bottom: 15px; display: flex; justify-content: space-between;">
+                        <!-- Page Heading -->
+                        <h4>회원 상세 정보</h4>
+                        <p class="text-gray">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="grid">
+                            <p class="grid-header">
+                                <span th:if="${user.user_type==1}">고객(개인) 정보</span>
+                                <span th:if="${user.user_type==2}">파트너 정보</span>
+                                <span th:if="${user.user_type==3}">파트너사 정보</span>
+                                <span th:if="${user.user_type==4}">고객(기업) 정보</span>
+                            </p>
+                            <div class="grid-body">
+                                <div class="item-wrapper">
+                                    <div class="table-responsive">
+                                        <form action="updateOptionCategory" method="POST">
+                                            <table class="table table-bordered" id="dataTable" style="width: 95%; cellspacing: '0'; margin: auto;">
+                                                <tbody>
+                                                <tr>
+                                                    <td>아이디</td>
+                                                    <td th:text="${user.user_login_id}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>이름</td>
+                                                    <td th:text="${user.user_name}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>닉네임</td>
+                                                    <td th:text="${user.user_nickname}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>연락처</td>
+                                                    <td th:text="${user.user_phone}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>이메일</td>
+                                                    <td th:text="${user.user_email}">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>유형</td>
+                                                    <td>
+                                                        <span th:if="${user.user_type == 0}">최고관리자</span>
+                                                        <span th:if="${user.user_type == 1}">관리자</span>
+                                                        <span th:if="${user.user_type == 2}">일반 회원</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>상태</td>
+                                                    <td>
+                                                        <span th:if="${user.user_status == 0}">대기</span>
+                                                        <span th:if="${user.user_status == 1}">정상</span>
+                                                        <span th:if="${user.user_status == 2}">정지</span>
+                                                        <span th:if="${user.user_status == 9}">탈퇴</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>최종 로그인 날짜</td>
+                                                    <td th:text="${user.user_login_date}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>가입날짜</td>
+                                                    <td th:text="${user.user_create_date}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>수정날짜</td>
+                                                    <td th:text="${user.user_modify_date}"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="mx-auto" style="text-align: center; margin-top: 10px;">
+												<span>
+												    <a th:href="@{detailUpdlUsers(user_id=${user.user_id})}"><button type="button" class="search_btn btn btn-primary">수정</button></a>
+												</span>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="/../common/footer.html"></th:block>
+<script src="../assets/vendors/js/core.js"></script>
+<script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
+<script src="../assets/vendors/chartjs/Chart.min.js"></script>
+<script src="../assets/js/charts/chartjs.addon.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+</script>
+<script>
+</script>
+</body>
+</html>

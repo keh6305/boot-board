@@ -37,11 +37,22 @@ public class UserController
     public ModelAndView userDetail(ModelAndView mv, @PathVariable("user_id") int user_id)
     {
         UserDto user = userService.selectUser(user_id);
-        System.out.println("user = " + user);
 
         mv.addObject("user", user);
 
         mv.setViewName("user/userDetail");
+
+        return mv;
+    }
+
+    @GetMapping("/update/{user_id}")
+    public ModelAndView userUpdate(ModelAndView mv, @PathVariable("user_id") int user_id)
+    {
+        UserDto user = userService.selectUser(user_id);
+
+        mv.addObject("user", user);
+
+        mv.setViewName("user/userUpdate");
 
         return mv;
     }

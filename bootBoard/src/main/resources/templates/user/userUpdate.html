@@ -33,9 +33,9 @@
                     <div class="col-12">
                         <div class="grid">
                             <p class="grid-header">
-                                <span th:if="${user.user_type == 0}">최고관리자 정보</span>
-                                <span th:if="${user.user_type == 1}">관리자 정보</span>
-                                <span th:if="${user.user_type == 2}">회원 정보</span>
+                                <span th:if="${user.user_type == 0}">최고관리자 정보 수정</span>
+                                <span th:if="${user.user_type == 1}">관리자 정보 수정</span>
+                                <span th:if="${user.user_type == 2}">회원 정보 수정</span>
                             </p>
                             <div class="grid-body">
                                 <div class="item-wrapper">
@@ -48,21 +48,32 @@
                                                     <td th:text="${user.user_login_id}"></td>
                                                 </tr>
                                                 <tr>
+                                                    <td>아이디</td>
+                                                    <td th:text="${user.user_login_id}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>비밀번호</td>
+                                                    <td><input type="password" class="form-control"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>비밀번호 확인</td>
+                                                    <td><input type="password" class="form-control"></td>
+                                                </tr>
+                                                <tr>
                                                     <td>이름</td>
                                                     <td th:text="${user.user_name}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>닉네임</td>
-                                                    <td th:text="${user.user_nickname}"></td>
+                                                    <td><input class="form-control" th:value="${user.user_nickname}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>연락처</td>
-                                                    <td th:text="${user.user_phone}"></td>
+                                                    <td><input  class="form-control" th:value="${user.user_phone}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>이메일</td>
-                                                    <td th:text="${user.user_email}">
-                                                    </td>
+                                                    <td><input class="form-control" th:value="${user.user_email}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>유형</td>
@@ -97,7 +108,7 @@
                                             </table>
                                             <div class="mx-auto" style="text-align: center; margin-top: 10px;">
 												<span>
-												    <a th:href="|/user/update/${user.user_id}|"><button type="button" class="search_btn btn btn-primary">수정</button></a>
+												    <button type="button" class="search_btn btn btn-primary">완료</button>
 												</span>
                                             </div>
                                         </form>

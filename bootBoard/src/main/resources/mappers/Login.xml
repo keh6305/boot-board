@@ -5,4 +5,10 @@
 		SELECT * FROM user
 		WHERE user_login_id = #{user_login_id}
 	</select>
+
+	<update id="updateLoginDate" parameterType="String">
+		UPDATE user
+		SET user_login_date = NOW()
+		WHERE user_login_id = #{user_login_id}
+	</update>
 </mapper>

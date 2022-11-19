@@ -17,7 +17,7 @@ import java.util.Map;
 public class UserController
 {
     @Autowired
-    private UserService service;
+    private UserService userService;
 
     @RequestMapping("/list")
     public ModelAndView userList(ModelAndView mv)
@@ -30,7 +30,7 @@ public class UserController
     @RequestMapping("/search")
     public Map<String, Object> userSearch(@RequestParam("user_type") int user_type, @RequestParam("user_status") int user_status, @RequestParam("keytype") int keytype, @RequestParam("keyword") String keyword, @RequestParam(defaultValue = "1", value = "page_num") int page_num, @RequestParam(defaultValue = "10", value = "limit") int limit)
     {
-        Map<String, Object> result = service.userSearch(user_type, user_status, keytype, keyword, page_num, limit);
+        Map<String, Object> result = userService.userSearch(user_type, user_status, keytype, keyword, page_num, limit);
 
         return result;
     }

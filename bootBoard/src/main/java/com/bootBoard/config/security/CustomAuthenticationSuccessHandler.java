@@ -1,5 +1,7 @@
 package com.bootBoard.config.security;
 
+import com.bootBoard.controller.LoginController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,9 @@ import java.io.IOException;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler
 {
 	private String defaultUrl = "/index";
+
+	@Autowired
+	private LoginController loginController;
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException
@@ -24,7 +29,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		session.setAttribute("login", true);
 		session.setAttribute("user_login_id", authentication.getName());
 		session.setMaxInactiveInterval(3600 * 24);
-		
+
+		int loginDate = loginController.updateLoginDate(authentication.getName());
+
+		System.out.println("loginDate = " + loginDate);
+
 		response.setStatus(200);
 //		response.getWriter().print(defaultUrl);
 //		response.getWriter().flush();

@@ -243,21 +243,31 @@
 					}
 				}
 				// list end
+
 				// paging start
-				if (result.page.page_num > 10) {
+				if (result.page.page_num > 10)
+				{
 					page_add += '<button class="paging" onclick="SearchBtn(' + (result.page.start_page - 10) + ')"><</button>';
 				}
-				for (var i = result.page.start_page; i < (result.page.end_page + 1); i++) {
-					if (result.page.page_num == i) {
+
+				for (var i = result.page.start_page; i < (result.page.end_page + 1); i++)
+				{
+					if (result.page.page_num == i)
+					{
 						page_add += '<button class="current" onclick="SearchBtn(' + i + ')">' + i + '</button>';
-					} else if (i <= result.page.max_page) {
+					}
+					else if (i <= result.page.max_page)
+					{
 						page_add += '<button class="paging" onclick="SearchBtn(' + i + ')">' + i + '</button>';
 					}
 				}
-				if (result.page.start_page + 10 < (result.page.max_page)) {
+
+				if (result.page.start_page + 10 < (result.page.max_page))
+				{
 					page_add += '<button class="paging" onclick="SearchBtn(' + (result.page.start_page + 10) + ')">></button>';
 				}
 				// paging end
+
 				item_list.empty();
 				item_list.append(item_add);
 				page_list.empty();

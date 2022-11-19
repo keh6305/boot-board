@@ -21,4 +21,12 @@ public class LoginServiceImpl implements LoginService
 
         return user;
     }
+
+    @Override
+    public int updateLoginDate(String user_login_id)
+    {
+        int result = loginMapper.updateLoginDate(user_login_id);
+
+        return result;
+    }
 }

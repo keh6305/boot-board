@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface LoginMapper
 {
     User loadUserByUsername(String user_login_id);
+
+    int updateLoginDate(String user_login_id);
 }

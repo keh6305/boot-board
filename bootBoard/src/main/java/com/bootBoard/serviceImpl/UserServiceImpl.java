@@ -17,21 +17,14 @@ import java.util.Map;
 public class UserServiceImpl implements UserService
 {
     @Autowired
-    private UserMapper mapper;
+    private UserMapper userMapper;
 
     @Override
     public Map<String, Object> userSearch(int user_type, int user_status, int keytype, String keyword, int page_num, int limit)
     {
-        System.out.println("user_type = " + user_type);
-        System.out.println("user_status = " + user_status);
-        System.out.println("keytype = " + keytype);
-        System.out.println("keyword = " + keyword);
-        System.out.println("page_num = " + page_num);
-        System.out.println("limit = " + limit);
-
         Map<String, Object> result = new HashMap<String, Object>();
 
-        int count = mapper.selectUserCount(user_type, user_status, keytype, keyword);
+        int count = userMapper.selectUserCount(user_type, user_status, keytype, keyword);
 
         int offset = (page_num - 1) * limit;
         int start_page = ((page_num - 1) / 10) * 10 + 1;
@@ -46,10 +39,7 @@ public class UserServiceImpl implements UserService
         page.setOffset(offset);
         page.setLimit(limit);
 
-        List<UserDto> user = mapper.selectUserList(user_type, user_status, keytype, keyword, offset, limit);
-
-        System.out.println("count = " + count);
-        System.out.println("user = " + user);
+        List<UserDto> user = userMapper.selectUserList(user_type, user_status, keytype, keyword, offset, limit);
 
         result.put("list", user);
         result.put("page", page);

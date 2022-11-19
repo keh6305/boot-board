@@ -5,4 +5,6 @@ import com.bootBoard.entity.User;
 public interface LoginService
 {
     User loadUserByUsername(String user_login_id);
+
+    int updateLoginDate(String user_login_id);
 }

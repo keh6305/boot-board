@@ -45,71 +45,66 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>아이디</td>
-                                                    <td th:text="${user.user_login_id}"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>아이디</td>
-                                                    <td th:text="${user.user_login_id}"></td>
+                                                    <td th:text="${detail.user_login_id}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>비밀번호</td>
-                                                    <td><input type="password" class="form-control"></td>
+                                                    <td><input type="password" class="form-control" id="newPassword"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>비밀번호 확인</td>
-                                                    <td><input type="password" class="form-control"></td>
+                                                    <td><input type="password" class="form-control" id="checkPassword"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>이름</td>
-                                                    <td th:text="${user.user_name}"></td>
+                                                    <td th:text="${detail.user_name}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>닉네임</td>
-                                                    <td><input class="form-control" th:value="${user.user_nickname}"></td>
+                                                    <td><input class="form-control" id="newNickname" th:value="${detail.user_nickname}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>연락처</td>
-                                                    <td><input  class="form-control" th:value="${user.user_phone}"></td>
+                                                    <td><input  class="form-control" id="newPhone" th:value="${detail.user_phone}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>이메일</td>
-                                                    <td><input class="form-control" th:value="${user.user_email}"></td>
+                                                    <td><input class="form-control" id="newEmail" th:value="${detail.user_email}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>유형</td>
                                                     <td>
-                                                        <span th:if="${user.user_type == 0}">최고관리자</span>
-                                                        <span th:if="${user.user_type == 1}">관리자</span>
-                                                        <span th:if="${user.user_type == 2}">일반 회원</span>
+                                                        <span th:if="${detail.user_type == 0}">최고관리자</span>
+                                                        <span th:if="${detail.user_type == 1}">관리자</span>
+                                                        <span th:if="${detail.user_type == 2}">일반 회원</span>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>상태</td>
                                                     <td>
-                                                        <span th:if="${user.user_status == 0}">대기</span>
-                                                        <span th:if="${user.user_status == 1}">정상</span>
-                                                        <span th:if="${user.user_status == 2}">정지</span>
-                                                        <span th:if="${user.user_status == 9}">탈퇴</span>
+                                                        <span th:if="${detail.user_status == 0}">대기</span>
+                                                        <span th:if="${detail.user_status == 1}">정상</span>
+                                                        <span th:if="${detail.user_status == 2}">정지</span>
+                                                        <span th:if="${detail.user_status == 9}">탈퇴</span>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>최종 로그인 날짜</td>
-                                                    <td th:text="${user.user_login_date}"></td>
+                                                    <td th:text="${detail.user_login_date}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>가입날짜</td>
-                                                    <td th:text="${user.user_create_date}"></td>
+                                                    <td th:text="${detail.user_create_date}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>수정날짜</td>
-                                                    <td th:text="${user.user_modify_date}"></td>
+                                                    <td th:text="${detail.user_modify_date}"></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             <div class="mx-auto" style="text-align: center; margin-top: 10px;">
-												<span>
-												    <button type="button" class="search_btn btn btn-primary">완료</button>
-												</span>
+                                                <button type="button" class="search_btn btn btn-primary" onclick="updateBtn();">완료</button>
+                                                <input type="hidden" id="userId" th:value="${detail.user_id}">
                                             </div>
                                         </form>
                                     </div>
@@ -132,6 +127,61 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+    function updateBtn()
+    {
+        var newPassword = $("#newPassword").val();
+        var checkPassword = $("#checkPassword").val();
+
+        if(newPassword != "")
+        {
+            if(newPassword === checkPassword)
+            {
+                var data = {'user_id' : $("#userId").val(), 'user_login_pw': newPassword, 'user_nickname': $("#newNickname").val(), 'user_phone': $("#newPhone").val(), 'user_email': $("#newEmail").val()};
+
+                updateUser(data);
+            }
+            else
+            {
+                alert("비밀번호가 일치하지 않습니다.");
+            }
+        }
+        else
+        {
+            var data = {'user_id' : $("#userId").val(), 'user_nickname': $("#newNickname").val(), 'user_phone': $("#newPhone").val(), 'user_email': $("#newEmail").val()};
+
+            updateUser(data);
+        }
+    }
+
+    function updateUser(data)
+    {
+        console.log(data);
+
+        $.ajax(
+            {
+                url: '/user/update',
+                method: 'POST',
+                dataType : 'json',
+                data : data,
+                success: function (result)
+                {
+                    if(result == 1)
+                    {
+                        alert("수정되었습니다.");
+
+                        location.reload();
+                    }
+                    else
+                    {
+                        alert("수정에 실패하였습니다.");
+                    }
+                },
+                error(e)
+                {
+                    console.log(e);
+                }
+            })
+    }
 </script>
 </body>
 </html>

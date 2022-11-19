@@ -77,4 +77,17 @@
         SELECT * FROM user
         WHERE user_id = #{user_id}
     </select>
+
+    <update id="updateUser">
+        UPDATE user
+        SET
+            <if test="user_login_pw != ''">
+                user_login_pw = #{user_login_pw},
+            </if>
+            user_nickname = #{user_nickname},
+            user_phone = #{user_phone},
+            user_email = #{user_email},
+            user_modify_date = NOW()
+        WHERE user_id = #{user_id}
+    </update>
 </mapper>

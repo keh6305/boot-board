@@ -38,7 +38,7 @@ public class UserController
     {
         UserDto user = userService.selectUser(user_id);
 
-        mv.addObject("user", user);
+        mv.addObject("detail", user);
 
         mv.setViewName("user/userDetail");
 
@@ -50,10 +50,18 @@ public class UserController
     {
         UserDto user = userService.selectUser(user_id);
 
-        mv.addObject("user", user);
+        mv.addObject("detail", user);
 
         mv.setViewName("user/userUpdate");
 
         return mv;
+    }
+
+    @PostMapping("/update")
+    public int updateUser(@RequestParam("user_id") int user_id, @RequestParam(value = "user_login_pw", required = false) String user_login_pw, @RequestParam("user_nickname") String user_nickname, @RequestParam("user_phone") String user_phone, @RequestParam("user_email") String user_emaeil)
+    {
+        int result = userService.updateUser(user_id, user_login_pw, user_nickname, user_phone, user_emaeil);
+
+        return result;
     }
 }

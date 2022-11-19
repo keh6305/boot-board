@@ -6,6 +6,7 @@ import com.bootBoard.mapper.UserMapper;
 import com.bootBoard.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,6 +19,9 @@ public class UserServiceImpl implements UserService
 {
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Map<String, Object> userSearch(int user_type, int user_status, int keytype, String keyword, int page_num, int limit)
@@ -51,5 +55,22 @@ public class UserServiceImpl implements UserService
     public UserDto selectUser(int user_id)
     {
         return userMapper.selectUser(user_id);
+    }
+
+    @Override
+    public int updateUser(int user_id, String user_login_pw, String user_nickname, String user_phone, String user_emaeil)
+    {
+        String password = "";
+
+        if(user_login_pw != null)
+        {
+            System.out.println("not null");
+
+            password = passwordEncoder.encode(user_login_pw);
+        }
+
+        int result = userMapper.updateUser(user_id, password, user_nickname, user_phone, user_emaeil);
+
+        return result;
     }
 }

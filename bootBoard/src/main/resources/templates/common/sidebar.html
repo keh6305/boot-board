@@ -1,13 +1,10 @@
 <div class="sidebar" th:with="user =${#authentication.principal}" xmlns:th="http://www.thymeleaf.org">
     <ul class="navigation-menu">
         <li>
-            <a href="#admin-li" data-toggle="collapse" aria-expanded="false">
+            <a href="/index" data-toggle="collapse" aria-expanded="false">
                 <span class="link-title">대시보드</span>
                 <i class="mdi mdi-apps link-icon"></i>
             </a>
-            <ul class="collapse navigation-submenu" id="admin-li">
-                <li><a href="/index">대시보드</a></li>
-            </ul>
         </li>
         <li>
             <a href="#admin-li1" data-toggle="collapse" aria-expanded="false">
@@ -18,6 +15,7 @@
                 <li><a href="/user/list">회원 목록</a></li>
             </ul>
         </li>
+        <!--
         <li>
             <a href="#admin-li2" data-toggle="collapse" aria-expanded="false">
                 <span class="link-title">인테리어 업체 관리</span>
@@ -113,5 +111,6 @@
                 <li><a href="/reservation/list">푸시 알림</a></li>
             </ul>
         </li>
+        -->
     </ul>
 </div>

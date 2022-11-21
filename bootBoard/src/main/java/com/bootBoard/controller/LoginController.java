@@ -15,6 +15,7 @@ public class LoginController
     @Autowired
     private LoginService loginService;
 
+    // 로그인 페이지
     @RequestMapping("/login")
     public ModelAndView login(ModelAndView mv)
     {
@@ -23,6 +24,16 @@ public class LoginController
         return mv;
     }
 
+    // 회원가입 페이지
+    @RequestMapping("/signup")
+    public ModelAndView signup(ModelAndView mv)
+    {
+        mv.setViewName("login/signup");
+
+        return mv;
+    }
+
+    // 로그인시 최종 로그인 날짜 업데이트
     public int updateLoginDate(String user_login_id)
     {
         int result = loginService.updateLoginDate(user_login_id);

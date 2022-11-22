@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>BootBoard</title>
+    <link type="text/css" rel="stylesheet" href="../assets/vendors/iconfonts/mdi/css/materialdesignicons.css" />
+    <link type="text/css" rel="stylesheet" href="../assets/vendors/css/vendor.addons.css"/>
+    <link type="text/css" rel="stylesheet" href="../assets/css/shared/style.css"/>
+    <link type="text/css" rel="stylesheet" href="../assets/css/demo_1/style.css">
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" />
+    <style>
+        .joinError{
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+<div class="authentication-theme auth-style_1">
+    <div class="row">
+        <div class="col-12 logo-section">
+            <h2 style="text-align: center; font-size: 50px;">Sign Up</h2>
+            <!-- <img src="../assets/images/mainLogo.png" alt="logo" class="logo"/> -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-7 col-sm-9 col-11 mx-auto">
+            <div class="grid">
+                <div class="grid-body">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-8 col-sm-9 col-12 mx-auto form-wrapper">
+                            <form action="/join" class="user" id="joinForm" method="POST">
+                                <div class="form-group">
+                                    <span>아이디</span>
+                                    <input type="text" class="form-control form-control-user" id="newId" name="user_login_id">
+                                </div>
+                                <div class="form-group">
+                                    <span>비밀번호</span>
+                                    <input type="password" class="form-control form-control-user" id="newPassword" name="user_login_pw">
+                                </div>
+                                <div class="form-group">
+                                    <span>비밀번호 확인</span>
+                                    <input type="password" class="form-control form-control-user" id="checkPassword">
+                                </div>
+                                <div class="form-group">
+                                    <span>이름</span>
+                                    <input type="text" class="form-control form-control-user" name="user_name">
+                                </div>
+                                <div class="form-group">
+                                    <span>닉네임</span>
+                                    <input type="text" class="form-control form-control-user" name="user_nickname">
+                                </div>
+                                <div class="form-group">
+                                    <span>연락처</span>
+                                    <input type="text" class="form-control form-control-user" name="user_phone">
+                                </div>
+                                <div class="form-group">
+                                    <span>이메일</span>
+                                    <input type="text" class="form-control form-control-user" name="user_email">
+                                </div>
+                                <div class="form-group">
+                                    <span>회원 유형</span>
+                                    <br>
+                                    <input type="radio" id="type1" name="user_type" value="0">
+                                    <label for="type1">최고 관리자</label>
+                                    <input type="radio" id="type2" name="user_type" value="1">
+                                    <label for="type2">관리자</label>
+                                    <input type="radio" id="type3" name="user_type" value="2" checked="checked">
+                                    <label for="type3">회원</label>
+                                </div>
+                                <button type="button" class="btn btn-dark btn-user btn-block" onclick="join();">Join</button>
+                                <span class="joinError" id="joinError"></span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="assets/vendors/js/core.js"></script>
+<script src="assets/vendors/js/vendor.addons.js"></script>
+<script src="assets/js/template.js"></script>
+<script>
+    function join()
+    {
+        var newId = $("#newId").val();
+        var newPassword = $("#newPassword").val();
+        var checkPassword = $("#checkPassword").val();
+
+        if(newId != "")
+        {
+            $.ajax(
+            {
+                url: '/login/checkId',
+                method: 'POST',
+                dataType : 'json',
+                data : {"user_login_id" : $("#newId").val()},
+                success: function (result)
+                {
+                    if(result != 0)
+                    {
+                        $("#joinError").text("중복된 아이디가 존재합니다.");
+                        $("#joinError").show();
+                    }
+                },
+                error(e)
+                {
+                    console.log(e);
+                }
+            })
+        }
+        else
+        {
+            $("#joinError").text("아이디를 입력해주세요.");
+            $("#joinError").css("color", "#ff0000");
+            $("#joinError").css("display", "block");
+
+            return;
+        }
+
+        if(newPassword != "")
+        {
+            if(newPassword === checkPassword)
+            {
+                $("#joinForm").submit();
+            }
+            else
+            {
+                $("#joinError").text("비밀번호를 확인해주세요.");
+                $("#joinError").show();
+            }
+        }
+        else
+        {
+                $("#joinError").text("비밀번호를 입력해주세요.");
+                $("#joinError").show();
+        }
+    }
+</script>
+</html>

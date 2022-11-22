@@ -8,5 +8,7 @@ public interface LoginMapper
 {
     User loadUserByUsername(String user_login_id);
 
+    int checkId(String user_login_id);
+
     int updateLoginDate(String user_login_id);
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,6 +32,15 @@ public class LoginController
         mv.setViewName("login/signup");
 
         return mv;
+    }
+
+    // 아이디 중복 확인
+    @PostMapping("/login/checkId")
+    public int checkId(@RequestParam("user_login_id") String user_login_id)
+    {
+        int result = loginService.checkId(user_login_id);
+
+        return result;
     }
 
     // 로그인시 최종 로그인 날짜 업데이트

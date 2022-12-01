@@ -11,6 +11,11 @@
 		WHERE user_login_id = #{user_login_id}
 	</select>
 
+	<select id="checkNickname" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM user
+		WHERE user_nickname = #{user_nickname}
+	</select>
+
 	<update id="updateLoginDate" parameterType="String">
 		UPDATE user
 		SET user_login_date = NOW()

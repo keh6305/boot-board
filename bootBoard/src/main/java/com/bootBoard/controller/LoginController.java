@@ -43,6 +43,15 @@ public class LoginController
         return result;
     }
 
+    // 아이디 중복 확인
+    @PostMapping("/login/checkNickname")
+    public int checkNickname(@RequestParam("user_nickname") String user_nickname)
+    {
+        int result = loginService.checkNickname(user_nickname);
+
+        return result;
+    }
+
     // 로그인시 최종 로그인 날짜 업데이트
     public int updateLoginDate(String user_login_id)
     {

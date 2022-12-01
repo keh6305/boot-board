@@ -31,6 +31,14 @@ public class LoginServiceImpl implements LoginService
     }
 
     @Override
+    public int checkNickname(String user_nickname)
+    {
+        int result = loginMapper.checkNickname(user_nickname);
+
+        return result;
+    }
+
+    @Override
     public int updateLoginDate(String user_login_id)
     {
         int result = loginMapper.updateLoginDate(user_login_id);

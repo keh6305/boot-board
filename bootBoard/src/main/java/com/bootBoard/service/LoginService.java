@@ -8,5 +8,7 @@ public interface LoginService
 
     int checkId(String user_login_id);
 
+    int checkNickname(String user_nickname);
+
     int updateLoginDate(String user_login_id);
 }

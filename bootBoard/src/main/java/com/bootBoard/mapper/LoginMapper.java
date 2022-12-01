@@ -12,5 +12,7 @@ public interface LoginMapper
 
     int checkNickname(String user_nickname);
 
+    int join(User user);
+
     int updateLoginDate(String user_login_id);
 }

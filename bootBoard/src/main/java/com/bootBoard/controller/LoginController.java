@@ -1,5 +1,6 @@
 package com.bootBoard.controller;
 
+import com.bootBoard.entity.User;
 import com.bootBoard.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,12 @@ public class LoginController
 {
     @Autowired
     private LoginService loginService;
+
+    // 로그인
+    public Object loadUserByUsername(String user_login_id)
+    {
+        return loginService.loadUserByUsername(user_login_id);
+    }
 
     // 로그인 페이지
     @RequestMapping("/login")
@@ -34,20 +41,20 @@ public class LoginController
         return mv;
     }
 
-    // 아이디 중복 확인
-    @PostMapping("/login/checkId")
-    public int checkId(@RequestParam("user_login_id") String user_login_id)
+    // 아이디, 닉네임 중복 확인
+    @PostMapping("/login/checkJoin")
+    public String checkJoin(@RequestParam("user_login_id") String user_login_id, @RequestParam("user_nickname") String user_nickname)
     {
-        int result = loginService.checkId(user_login_id);
+        String result = loginService.checkJoin(user_login_id, user_nickname);
 
         return result;
     }
 
-    // 아이디 중복 확인
-    @PostMapping("/login/checkNickname")
-    public int checkNickname(@RequestParam("user_nickname") String user_nickname)
+    // 회원가입
+    @RequestMapping("/join")
+    public int join(User user)
     {
-        int result = loginService.checkNickname(user_nickname);
+        int result = loginService.join(user);
 
         return result;
     }

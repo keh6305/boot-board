@@ -5,6 +5,7 @@ import com.bootBoard.mapper.LoginMapper;
 import com.bootBoard.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +14,9 @@ public class LoginServiceImpl implements LoginService
 {
     @Autowired
     private LoginMapper loginMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public User loadUserByUsername(String user_login_id)
@@ -23,21 +27,37 @@ public class LoginServiceImpl implements LoginService
     }
 
     @Override
-    public int checkId(String user_login_id)
+    public String checkJoin(String user_login_id, String user_nickname)
     {
-        int result = loginMapper.checkId(user_login_id);
+        String result = "success";
+
+        int checkId = loginMapper.checkId(user_login_id);
+        int checkNickname = loginMapper.checkNickname(user_nickname);
+
+        if(checkId != 0)
+        {
+            result = "failId";
+        }
+        else if(checkNickname != 0)
+        {
+            result = "failNickname";
+        }
 
         return result;
     }
 
     @Override
-    public int checkNickname(String user_nickname)
+    public int join(User user)
     {
-        int result = loginMapper.checkNickname(user_nickname);
+        String password = passwordEncoder.encode(user.getUser_login_pw());
+
+        user.setUser_login_pw(password);
+
+        int result = loginMapper.join(user);
 
         return result;
     }
-
+    
     @Override
     public int updateLoginDate(String user_login_id)
     {

@@ -31,24 +31,29 @@
                         <div class="col-lg-7 col-md-8 col-sm-9 col-12 mx-auto form-wrapper">
                             <form action="/join" class="user" id="joinForm" method="POST">
                                 <div class="form-group">
+                                    <span style="color: #ff0000">*</span>
                                     <span>아이디</span>
                                     <input type="text" class="form-control form-control-user" id="newId" name="user_login_id">
                                 </div>
                                 <div class="form-group">
+                                    <span style="color: #ff0000">*</span>
                                     <span>비밀번호</span>
                                     <input type="password" class="form-control form-control-user" id="newPassword" name="user_login_pw">
                                 </div>
                                 <div class="form-group">
+                                    <span style="color: #ff0000">*</span>
                                     <span>비밀번호 확인</span>
                                     <input type="password" class="form-control form-control-user" id="checkPassword">
                                 </div>
                                 <div class="form-group">
+                                    <span style="color: #ff0000">*</span>
                                     <span>이름</span>
-                                    <input type="text" class="form-control form-control-user" name="user_name">
+                                    <input type="text" class="form-control form-control-user" id="newName" name="user_name">
                                 </div>
                                 <div class="form-group">
+                                    <span style="color: #ff0000">*</span>
                                     <span>닉네임</span>
-                                    <input type="text" class="form-control form-control-user" name="user_nickname">
+                                    <input type="text" class="form-control form-control-user" id="newNickname" name="user_nickname">
                                 </div>
                                 <div class="form-group">
                                     <span>연락처</span>
@@ -88,54 +93,99 @@
         var newId = $("#newId").val();
         var newPassword = $("#newPassword").val();
         var checkPassword = $("#checkPassword").val();
+        var newName = $("#newName").val();
+        var newNickname = $("#newNickname").val();
 
-        if(newId != "")
+        if(newId == "")
+        {
+            $("#joinError").text("아이디를 입력해주세요.");
+            $("#joinError").css("color", "#ff0000");
+            $("#joinError").css("display", "block");
+        }
+        else if(newPassword == "")
+        {
+            $("#joinError").text("비밀번호를 입력해주세요.");
+            $("#joinError").show();
+        }
+        else if(checkPassword == "")
+        {
+            $("#joinError").text("비밀번호를 확인해주세요.");
+            $("#joinError").show();
+        }
+        else if(newName == "")
+        {
+            $("#joinError").text("이름을 입력해주세요.");
+            $("#joinError").show();
+        }
+        else if(newNickname == "")
+        {
+            $("#joinError").text("닉네임를 입력해주세요.");
+            $("#joinError").show();
+        }
+        else
         {
             $.ajax(
             {
-                url: '/login/checkId',
-                method: 'POST',
-                dataType : 'json',
-                data : {"user_login_id" : $("#newId").val()},
-                success: function (result)
+                url : '/login/checkJoin',
+                method : 'POST',
+                dataType : 'text',
+                data : {"user_login_id" : newId, "user_nickname" : newNickname},
+                success: function(result)
                 {
-                    if(result != 0)
+                    if(result == "failId")
                     {
                         $("#joinError").text("중복된 아이디가 존재합니다.");
                         $("#joinError").show();
+                    }
+                    else if(result == "failNickname")
+                    {
+                        $("#joinError").text("중복된 닉네임이 존재합니다.");
+                        $("#joinError").show();
+                    }
+                    else
+                    {
+                        if(confirm("회원가입하시겠습니까?"))
+                        {
+                            var data = new FormData($("#joinForm")[0]);
+
+                            $.ajax(
+                            {
+                                url: "/join",
+                                method : "POST",
+                                data : data,
+                                cache : false,
+                                contentType : false,
+                                processData : false,
+                                success: function(result)
+                                {
+                                    if(result == 0)
+                                    {
+                                        alert("회원가입에 실패하였습니다.");
+                                    }
+                                    else
+                                    {
+                                        alert("회원가입되었습니다. 승인을 기다려주세요.");
+
+                                        location.href = "/login";
+                                    }
+                                },
+                                error(e)
+                                {
+                                    console.log(e);
+                                }
+                            })
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                 },
                 error(e)
                 {
                     console.log(e);
                 }
-            })
-        }
-        else
-        {
-            $("#joinError").text("아이디를 입력해주세요.");
-            $("#joinError").css("color", "#ff0000");
-            $("#joinError").css("display", "block");
-
-            return;
-        }
-
-        if(newPassword != "")
-        {
-            if(newPassword === checkPassword)
-            {
-                $("#joinForm").submit();
-            }
-            else
-            {
-                $("#joinError").text("비밀번호를 확인해주세요.");
-                $("#joinError").show();
-            }
-        }
-        else
-        {
-                $("#joinError").text("비밀번호를 입력해주세요.");
-                $("#joinError").show();
+            });
         }
     }
 </script>

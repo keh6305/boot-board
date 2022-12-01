@@ -16,6 +16,13 @@
 		WHERE user_nickname = #{user_nickname}
 	</select>
 
+	<insert id="join" parameterType="User">
+		INSERT INTO user
+		(user_login_id, user_login_pw, user_name, user_nickname, user_phone, user_email, user_type, user_status, user_authority, user_create_date)
+		VALUES
+		(#{user_login_id}, #{user_login_pw}, #{user_name}, #{user_nickname}, #{user_phone}, #{user_email}, #{user_type}, 0, "USER", NOW())
+	</insert>
+
 	<update id="updateLoginDate" parameterType="String">
 		UPDATE user
 		SET user_login_date = NOW()

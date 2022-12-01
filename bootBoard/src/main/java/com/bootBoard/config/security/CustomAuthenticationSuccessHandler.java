@@ -32,8 +32,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 		int loginDate = loginController.updateLoginDate(authentication.getName());
 
-		System.out.println("loginDate = " + loginDate);
-
 		response.setStatus(200);
 //		response.getWriter().print(defaultUrl);
 //		response.getWriter().flush();

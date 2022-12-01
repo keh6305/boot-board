@@ -6,9 +6,9 @@ public interface LoginService
 {
     User loadUserByUsername(String user_login_id);
 
-    int checkId(String user_login_id);
+    String checkJoin(String user_login_id, String user_nickname);
 
-    int checkNickname(String user_nickname);
+    int join(User user);
 
     int updateLoginDate(String user_login_id);
 }

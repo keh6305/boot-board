@@ -57,7 +57,7 @@ public class LoginServiceImpl implements LoginService
 
         return result;
     }
-    
+
     @Override
     public int updateLoginDate(String user_login_id)
     {

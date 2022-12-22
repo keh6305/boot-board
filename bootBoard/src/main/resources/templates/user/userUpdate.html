@@ -47,14 +47,16 @@
                                                     <td>아이디</td>
                                                     <td th:text="${detail.user_login_id}"></td>
                                                 </tr>
-                                                <tr>
-                                                    <td>비밀번호</td>
-                                                    <td><input type="password" class="form-control" id="newPassword"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>비밀번호 확인</td>
-                                                    <td><input type="password" class="form-control" id="checkPassword"></td>
-                                                </tr>
+                                                <th:block th:if="${user.user_id == detail.user_id}">
+                                                    <tr>
+                                                        <td>비밀번호</td>
+                                                        <td><input type="password" class="form-control" id="newPassword"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>비밀번호 확인</td>
+                                                        <td><input type="password" class="form-control" id="checkPassword"></td>
+                                                    </tr>
+                                                </th:block>
                                                 <tr>
                                                     <td>이름</td>
                                                     <td th:text="${detail.user_name}"></td>
@@ -74,18 +76,40 @@
                                                 <tr>
                                                     <td>유형</td>
                                                     <td>
-                                                        <span th:if="${detail.user_type == 0}">최고관리자</span>
-                                                        <span th:if="${detail.user_type == 1}">관리자</span>
-                                                        <span th:if="${detail.user_type == 2}">일반 회원</span>
+                                                        <th:block th:if="${user.user_type == 0}">
+                                                            <input type="radio" id="type1" name="user_type" value="0" th:checked="${detail.user_type == 0}">
+                                                            <label for="type1">최고 관리자</label>
+                                                            <input type="radio" id="type2" name="user_type" value="1" th:checked="${detail.user_type == 1}">
+                                                            <label for="type2">관리자</label>
+                                                            <input type="radio" id="type3" name="user_type" value="2" th:checked="${detail.user_type == 2}">
+                                                            <label for="type3">회원</label>
+                                                        </th:block>
+                                                        <th:block th:if="${user.user_type != 0}">
+                                                            <span th:if="${detail.user_type == 0}">최고관리자</span>
+                                                            <span th:if="${detail.user_type == 1}">관리자</span>
+                                                            <span th:if="${detail.user_type == 2}">일반 회원</span>
+                                                        </th:block>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>상태</td>
                                                     <td>
-                                                        <span th:if="${detail.user_status == 0}">대기</span>
-                                                        <span th:if="${detail.user_status == 1}">정상</span>
-                                                        <span th:if="${detail.user_status == 2}">정지</span>
-                                                        <span th:if="${detail.user_status == 9}">탈퇴</span>
+                                                        <th:block th:if="${user.user_type != 2}">
+                                                            <input type="radio" id="status1" name="user_status" value="0" th:checked="${detail.user_status == 0}">
+                                                            <label for="status1">대기</label>
+                                                            <input type="radio" id="status2" name="user_status" value="1" th:checked="${detail.user_status == 1}">
+                                                            <label for="status2">정상</label>
+                                                            <input type="radio" id="status3" name="user_status" value="2" th:checked="${detail.user_status == 2}">
+                                                            <label for="status3">정지</label>
+                                                            <input type="radio" id="status4" name="user_status" value="9" th:checked="${detail.user_status == 9}">
+                                                            <label for="status4">탈퇴</label>
+                                                        </th:block>
+                                                        <th:block th:unless="${user.user_type != 2}">
+                                                            <span th:if="${detail.user_status == 0}">대기</span>
+                                                            <span th:if="${detail.user_status == 1}">정상</span>
+                                                            <span th:if="${detail.user_status == 2}">정지</span>
+                                                            <span th:if="${detail.user_status == 9}">탈퇴</span>
+                                                        </th:block>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -118,12 +142,12 @@
     </div>
 </div>
 <th:block th:include="/../common/footer.html"></th:block>
-<script src="../assets/vendors/js/core.js"></script>
-<script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
-<script src="../assets/vendors/chartjs/Chart.min.js"></script>
-<script src="../assets/js/charts/chartjs.addon.js"></script>
-<script src="../assets/js/template.js"></script>
-<script src="../assets/js/dashboard.js"></script>
+<script src="/assets/vendors/js/core.js"></script>
+<script src="/assets/vendors/apexcharts/apexcharts.min.js"></script>
+<script src="/assets/vendors/chartjs/Chart.min.js"></script>
+<script src="/assets/js/charts/chartjs.addon.js"></script>
+<script src="/assets/js/template.js"></script>
+<script src="/assets/js/dashboard.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
@@ -136,7 +160,7 @@
         {
             if(newPassword === checkPassword)
             {
-                var data = {'user_id' : $("#userId").val(), 'user_login_pw': newPassword, 'user_nickname': $("#newNickname").val(), 'user_phone': $("#newPhone").val(), 'user_email': $("#newEmail").val()};
+                var data = {'user_id' : $("#userId").val(), 'user_login_pw': newPassword, 'user_nickname': $("#newNickname").val(), 'user_phone': $("#newPhone").val(), 'user_email': $("#newEmail").val(), 'user_type': $('input:radio[name="user_type"]:checked').val(), 'user_status': $('input:radio[name="user_status"]:checked').val()};
 
                 updateUser(data);
             }
@@ -147,7 +171,7 @@
         }
         else
         {
-            var data = {'user_id' : $("#userId").val(), 'user_nickname': $("#newNickname").val(), 'user_phone': $("#newPhone").val(), 'user_email': $("#newEmail").val()};
+            var data = {'user_id' : $("#userId").val(), 'user_nickname': $("#newNickname").val(), 'user_phone': $("#newPhone").val(), 'user_email': $("#newEmail").val(), 'user_type': $('input:radio[name="user_type"]:checked').val(), 'user_status': $('input:radio[name="user_status"]:checked').val()};
 
             updateUser(data);
         }
@@ -167,7 +191,7 @@
                     {
                         alert("수정되었습니다.");
 
-                        location.reload();
+                        location.href = "/user/detail/" + $("#userId").val();
                     }
                     else
                     {

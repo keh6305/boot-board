@@ -1,6 +1,7 @@
 package com.bootBoard.controller;
 
 import com.bootBoard.dto.UserDto;
+import com.bootBoard.dto.UserUpdateDto;
 import com.bootBoard.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +59,9 @@ public class UserController
     }
 
     @PostMapping("/update")
-    public int updateUser(@RequestParam("user_id") int user_id, @RequestParam(value = "user_login_pw", required = false) String user_login_pw, @RequestParam("user_nickname") String user_nickname, @RequestParam("user_phone") String user_phone, @RequestParam("user_email") String user_emaeil)
+    public int updateUser(UserUpdateDto user)
     {
-        int result = userService.updateUser(user_id, user_login_pw, user_nickname, user_phone, user_emaeil);
+        int result = userService.updateUser(user);
 
         return result;
     }

@@ -2,6 +2,7 @@ package com.bootBoard.serviceImpl;
 
 import com.bootBoard.dto.Pagination;
 import com.bootBoard.dto.UserDto;
+import com.bootBoard.dto.UserUpdateDto;
 import com.bootBoard.mapper.UserMapper;
 import com.bootBoard.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -58,18 +59,14 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public int updateUser(int user_id, String user_login_pw, String user_nickname, String user_phone, String user_emaeil)
+    public int updateUser(UserUpdateDto user)
     {
-        String password = "";
-
-        if(user_login_pw != null)
+        if(user.getUser_login_pw() != null)
         {
-            System.out.println("not null");
-
-            password = passwordEncoder.encode(user_login_pw);
+            user.setEncodingPassword(passwordEncoder.encode(user.getUser_login_pw()));
         }
 
-        int result = userMapper.updateUser(user_id, password, user_nickname, user_phone, user_emaeil);
+        int result = userMapper.updateUser(user);
 
         return result;
     }

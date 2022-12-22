@@ -1,6 +1,7 @@
 package com.bootBoard.service;
 
 import com.bootBoard.dto.UserDto;
+import com.bootBoard.dto.UserUpdateDto;
 
 import java.util.Map;
 
@@ -10,5 +11,5 @@ public interface UserService
 
     UserDto selectUser(int user_id);
 
-    int updateUser(int user_id, String user_login_pw, String user_nickname, String user_phone, String user_emaeil);
+    int updateUser(UserUpdateDto user);
 }

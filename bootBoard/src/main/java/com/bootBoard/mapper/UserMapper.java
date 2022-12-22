@@ -1,6 +1,7 @@
 package com.bootBoard.mapper;
 
 import com.bootBoard.dto.UserDto;
+import com.bootBoard.dto.UserUpdateDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,5 +16,5 @@ public interface UserMapper
 
     UserDto selectUser(int user_id);
 
-    int updateUser(@Param("user_id") int user_id, @Param("user_login_pw") String user_login_pw, @Param("user_nickname") String user_nickname, @Param("user_phone") String user_phone, @Param("user_email") String user_emaeil);
+    int updateUser(UserUpdateDto user);
 }

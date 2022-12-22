@@ -78,15 +78,17 @@
         WHERE user_id = #{user_id}
     </select>
 
-    <update id="updateUser">
+    <update id="updateUser" parameterType="UserUpdateDto">
         UPDATE user
         SET
-            <if test="user_login_pw != ''">
-                user_login_pw = #{user_login_pw},
+            <if test="encodingPassword != null">
+                user_login_pw = #{encodingPassword},
             </if>
             user_nickname = #{user_nickname},
             user_phone = #{user_phone},
             user_email = #{user_email},
+            user_type = #{user_type},
+            user_status = #{user_status},
             user_modify_date = NOW()
         WHERE user_id = #{user_id}
     </update>

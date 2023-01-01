@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // 회원 검색
     @Override
     public Map<String, Object> userSearch(int user_type, int user_status, int keytype, String keyword, int page_num, int limit)
     {

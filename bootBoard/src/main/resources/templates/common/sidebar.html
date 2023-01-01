@@ -1,7 +1,7 @@
 <div class="sidebar" th:with="user =${#authentication.principal}" xmlns:th="http://www.thymeleaf.org">
     <ul class="navigation-menu">
         <li>
-            <a href="/index" data-toggle="collapse" aria-expanded="false">
+            <a href="/index" aria-expanded="false">
                 <span class="link-title">대시보드</span>
                 <i class="mdi mdi-apps link-icon"></i>
             </a>
@@ -13,6 +13,15 @@
             </a>
             <ul class="collapse navigation-submenu" id="admin-li1">
                 <li><a href="/user/list">회원 목록</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#admin-li2" data-toggle="collapse" aria-expanded="false">
+                <span class="link-title">게시판 관리</span>
+                <i class="mdi mdi-calendar-text link-icon"></i>
+            </a>
+            <ul class="collapse navigation-submenu" id="admin-li2">
+                <li><a href="/board/notice/list">공지사항</a></li>
             </ul>
         </li>
         <!--
@@ -28,7 +37,7 @@
         <li>
             <a href="#admin-li3" data-toggle="collapse" aria-expanded="false">
                 <span class="link-title">대리점 관리</span>
-                <i class="mdi mdi-calendar-text link-icon"></i>
+                <i class="mdi mdi-barley link-icon"></i>
             </a>
             <ul class="collapse navigation-submenu" id="admin-li3">
                 <li><a href="/agency/agencyList">대리점</a></li>
@@ -42,18 +51,6 @@
             <ul class="collapse navigation-submenu" id="admin-li4">
                 <li><a href="/product/list">상품 목록</a></li>
                 <li><a href="/sample/list">샘플북 신청 목록</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#admin-li5" data-toggle="collapse" aria-expanded="false">
-                <span class="link-title">게시판 통합 관리</span>
-                <i class="mdi mdi-barley link-icon"></i>
-            </a>
-            <ul class="collapse navigation-submenu" id="admin-li5">
-                <li><a href="/board/boardList">공지사항</a></li>
-                <li><a href="/event/eventList">이벤트</a></li>
-                <li><a href="/faq/faqList">FAQ</a></li>
-                <li><a href="/qna/qnaList">QNA</a></li>
             </ul>
         </li>
         <li>

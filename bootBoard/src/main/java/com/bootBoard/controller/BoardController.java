@@ -3,22 +3,36 @@ package com.bootBoard.controller;
 import com.bootBoard.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController
 {
+    @Autowired
     private BoardService boardService;
 
     @RequestMapping("/notice/list")
-    public ModelAndView boardList(ModelAndView mv)
+    public ModelAndView noticeList(ModelAndView mv)
     {
         mv.setViewName("board/noticeList");
 
         return mv;
+    }
+    
+    @PostMapping("/notice/search")
+    public Map<String, Object> noticeSearch(@RequestParam("user_type") int user_type, @RequestParam(defaultValue = "1", value = "page_num") int page_num, @RequestParam(defaultValue = "10", value = "limit") int limit)
+    {
+        Map<String, Object> result = boardService.noticeSearch(user_type, page_num, limit);
+
+        return result;
     }
 }

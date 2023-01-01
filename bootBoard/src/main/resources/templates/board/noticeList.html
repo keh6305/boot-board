@@ -40,69 +40,9 @@
 				</div>
 				<div class="row">
 					<div class="col-12">
-						<div class="grid">
-							<p class="grid-header">공지사항 검색</p>
-							<div class="card-body">
-								<br>
-								<div class="grid-body">
-									<div class="item-wrapper">
-										<div class="table-responsive">
-											<table class="table table-bordered" style="width: 100%; cellspacing: '0'; margin: auto;">
-												<tbody>
-												<tr>
-													<td>회원 유형</td>
-													<td>
-														<input type="radio" id="type1" name="user_type" value="99" checked="checked">
-														<label for="type1">전체</label>
-														<input type="radio" id="type2" name="user_type" value="0">
-														<label for="type2">최고 관리자</label>
-														<input type="radio" id="type3" name="user_type" value="1">
-														<label for="type3">관리자</label>
-														<input type="radio" id="type4" name="user_type" value="2">
-														<label for="type4">회원</label>
-													</td>
-												</tr>
-												<tr>
-													<td>회원 상태</td>
-													<td>
-														<input type="radio" id="status1" name="user_status" value="99" checked="checked">
-														<label for="status1">전체</label>
-														<input type="radio" id="status2" name="user_status" value="0">
-														<label for="status2">대기</label>
-														<input type="radio" id="status3" name="user_status" value="1">
-														<label for="status3">정상</label>
-														<input type="radio" id="status4" name="user_status" value="2">
-														<label for="status4">정지</label>
-														<input type="radio" id="status5" name="user_status" value="9">
-														<label for="status5">탈퇴</label>
-													</td>
-												</tr>
-												<tr>
-													<td>검색어</td>
-													<td>
-														<select class="form-control" id="keytype" style="width: 150px;">
-															<option value="0">전체</option>
-															<option value="1">번호</option>
-															<option value="2">아이디</option>
-															<option value="3">이름</option>
-															<option value="4">닉네임</option>
-														</select>
-														<input type="text" class="form-control" id="keyword" style="width: 500px;">
-													</td>
-												</tr>
-												</tbody>
-											</table>
-											<div class="mx-auto" style="text-align: center; margin-top: 10px;">
-												<button type="button" class="search_btn btn btn-primary" onclick="SearchBtn(1);">검색 </button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 						<div class="col-12">
 							<div class="grid" id="grid-width">
-								<p class="grid-header">회원 목록</p>
+								<p class="grid-header">공지사항 목록</p>
 								<div class="grid-body">
 									<div class="item-wrapper">
 										<div class="table-responsive">
@@ -110,15 +50,8 @@
 												<tbody>
 												<tr>
 													<td>번호</td>
-													<td>아이디</td>
-													<td>이름</td>
-													<td>닉네임</td>
-													<td>전화번호</td>
-													<td>이메일</td>
-													<td>회원 유형</td>
-													<td>회원 상태</td>
-													<td>최종 로그인 일자</td>
-													<td>가입일자</td>
+													<td>제목</td>
+													<td>등록일</td>
 													<td></td>
 												</tr>
 												</tbody>
@@ -147,7 +80,7 @@
 <script src="/assets/js/dashboard.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script>
+<script th:inline="javascript">
 	$(document).ready(function()
 	{
 		SearchBtn(1);
@@ -155,11 +88,16 @@
 
 	function SearchBtn(e)
 	{
-		var data = {'user_type': $('input:radio[name="user_type"]:checked').val(), 'user_status': $('input:radio[name="user_status"]:checked').val(), 'keytype': $("#keytype").val(), 'keyword': $("#keyword").val(), 'page_num': e};
+		var user = [[${user}]];
+
+		console.log(user.user_id)
+		console.log(user.user_type)
+
+		var data = {'user_type' : user.user_type, 'page_num': e};
 
 		$.ajax(
 		{
-			url: '/user/search',
+			url: '/board/notice/search',
 			method: 'POST',
 			dataType : 'json',
 			data : data,
@@ -178,13 +116,6 @@
 					item_add += '<td></td>';
 					item_add += '<td></td>';
 					item_add += '<td></td>';
-					item_add += '<td></td>';
-					item_add += '<td></td>';
-					item_add += '<td></td>';
-					item_add += '<td></td>';
-					item_add += '<td></td>';
-					item_add += '<td></td>';
-					item_add += '<td></td>';
 					item_add += '</tr>';
 				}
 				else
@@ -192,48 +123,11 @@
 					for(var i = 0; i < result.list.length; i++)
 					{
 						item_add += '<tr>';
-						item_add += '<td>' + result.list[i].user_id + '</td>';
-						item_add += '<td>' + result.list[i].user_login_id + '</td>';
-						item_add += '<td>' + result.list[i].user_name + '</td>';
-						item_add += '<td>' + result.list[i].user_nickname + '</td>';
-						item_add += '<td>' + result.list[i].user_phone + '</td>';
-						item_add += '<td>' + result.list[i].user_email + '</td>';
+						item_add += '<td>' + result.list[i].notice_id + '</td>';
+						item_add += '<td>' + result.list[i].notice_title + '</td>';
+						item_add += '<td>' + result.list[i].notice_create_date + '</td>';
 
-
-						if (result.list[i].user_type == 0)
-						{
-							item_add += '<td>최고관리자</td>';
-						}
-						else if (result.list[i].user_type == 1)
-						{
-							item_add += '<td>관리자</td>';
-						}
-						else if (result.list[i].user_type == 2)
-						{
-							item_add += '<td>일반</td>';
-						}
-
-						if(result.list[i].user_status == 0)
-						{
-							item_add += '<td>대기</td>';
-						}
-						else if (result.list[i].user_status == 1)
-						{
-							item_add += '<td>정상</td>';
-						}
-						else if (result.list[i].user_status == 2)
-						{
-							item_add += '<td>제제</td>';
-						}
-						else if (result.list[i].user_status == 9)
-						{
-							item_add += '<td>탙뢰</td>';
-						}
-
-						item_add += '<td>' + result.list[i].user_login_date + '</td>';
-						item_add += '<td>' + result.list[i].user_create_date + '</td>';
-
-						item_add += '<td>' + '<a href="/user/detail/' + result.list[i].user_id + '"><button class="btn btn-sm btn-primary">세부사항</button></a>' + '</td>';
+						item_add += '<td>' + '<a href="/notice/detail/' + result.list[i].notice_id + '"><button class="btn btn-sm btn-primary">세부사항</button></a>' + '</td>';
 						item_add += '</tr>';
 					}
 				}

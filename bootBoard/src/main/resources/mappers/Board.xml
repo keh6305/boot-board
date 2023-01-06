@@ -18,4 +18,12 @@
         ORDER BY notice_id DESC
         LIMIT #{offset}, #{limit}
     </select>
+
+    <!-- 공지사항 등록 -->
+    <insert id="insertNotice" parameterType="NoticeDto">
+        INSERT INTO notice
+        (notice_title, notice_content, notice_status, notice_create_date, notice_modify_date)
+        VALUES
+        (#{notice_title}, #{notice_content}, #{notice_status}, NOW(), NOW())
+    </insert>
 </mapper>

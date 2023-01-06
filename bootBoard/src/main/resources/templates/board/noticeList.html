@@ -42,18 +42,26 @@
 					<div class="col-12">
 						<div class="col-12">
 							<div class="grid" id="grid-width">
+								<a class="btn btn-sm btn-secondary" th:if="${user.user_type != 2}" href="/board/notice/insert" style="float: right; margin: 5px 10px 0 0;">등록</a>
 								<p class="grid-header">공지사항 목록</p>
 								<div class="grid-body">
 									<div class="item-wrapper">
 										<div class="table-responsive">
 											<table class="table table-bordered" id="dataTable" style="width: 100%; cellspacing: '0'; margin: auto;">
 												<tbody>
-												<tr>
-													<td>번호</td>
-													<td>제목</td>
-													<td>등록일</td>
-													<td></td>
-												</tr>
+													<tr th:if="${user.user_type != 2}">
+														<td>번호</td>
+														<td>제목</td>
+														<td>공개여부</td>
+														<td>등록일</td>
+														<td></td>
+													</tr>
+													<tr th:if="${user.user_type == 2}">
+														<td>번호</td>
+														<td>제목</td>
+														<td>등록일</td>
+														<td></td>
+													</tr>
 												</tbody>
 												<tbody id="item_list">
 												</tbody>
@@ -111,12 +119,25 @@
 				// list start
 				if (result.list.length == 0)
 				{
-					item_add += '<tr>';
-					item_add += '<td></td>';
-					item_add += '<td></td>';
-					item_add += '<td></td>';
-					item_add += '<td></td>';
-					item_add += '</tr>';
+					if(user.user_type != 2)
+					{
+						item_add += '<tr>';
+						item_add += '<td></td>';
+						item_add += '<td></td>';
+						item_add += '<td></td>';
+						item_add += '<td></td>';
+						item_add += '<td></td>';
+						item_add += '</tr>';
+					}
+					else
+					{
+						item_add += '<tr>';
+						item_add += '<td></td>';
+						item_add += '<td></td>';
+						item_add += '<td></td>';
+						item_add += '<td></td>';
+						item_add += '</tr>';
+					}
 				}
 				else
 				{
@@ -125,6 +146,12 @@
 						item_add += '<tr>';
 						item_add += '<td>' + result.list[i].notice_id + '</td>';
 						item_add += '<td>' + result.list[i].notice_title + '</td>';
+
+						if(user.user_type != 2)
+						{
+							item_add += '<td>' + (result.list[i].notice_status == 0 ? '미공개' : '공개') + '</td>';
+						}
+
 						item_add += '<td>' + result.list[i].notice_create_date + '</td>';
 
 						item_add += '<td>' + '<a href="/notice/detail/' + result.list[i].notice_id + '"><button class="btn btn-sm btn-primary">세부사항</button></a>' + '</td>';

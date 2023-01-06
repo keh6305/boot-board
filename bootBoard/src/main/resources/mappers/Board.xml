@@ -19,6 +19,12 @@
         LIMIT #{offset}, #{limit}
     </select>
 
+    <!-- 공지사항 조회 -->
+    <select id="selectNotice" parameterType="int" resultType="NoticeDto">
+        SELECT * FROM notice
+        WHERE notice_id = #{notice_id}
+    </select>
+
     <!-- 공지사항 등록 -->
     <insert id="insertNotice" parameterType="NoticeDto">
         INSERT INTO notice

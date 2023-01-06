@@ -19,7 +19,7 @@ public class BoardServiceImpl implements BoardService
     @Autowired
     private BoardMapper boardMapper;
 
-    // 공지사항 조회
+    // 공지사항 목록 조회
     @Override
     public Map<String, Object> noticeSearch(int user_type, int page_num, int limit)
     {
@@ -46,6 +46,15 @@ public class BoardServiceImpl implements BoardService
         result.put("page", page);
 
         return result;
+    }
+
+    // 공지사항 조회
+    @Override
+    public NoticeDto selectNotice(int notice_id)
+    {
+        NoticeDto notice = boardMapper.selectNotice(notice_id);
+
+        return notice;
     }
 
     // 공지사항 등록

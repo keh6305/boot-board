@@ -15,4 +15,6 @@ public interface BoardService
     // 공지사항 등록
     int insertNotice(NoticeDto notice);
 
+    // 공지사항 수정
+    int updateNotice(NoticeDto notice);
 }

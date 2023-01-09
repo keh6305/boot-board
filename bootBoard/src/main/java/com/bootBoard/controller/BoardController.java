@@ -67,4 +67,26 @@ public class BoardController
 
         return result;
     }
+
+    // 공지사항 수정 페이지
+    @GetMapping("/notice/update/{notice_id}")
+    public ModelAndView noticeUpdate(ModelAndView mv, @PathVariable("notice_id") int notice_id)
+    {
+        NoticeDto notice = boardService.selectNotice(notice_id);
+
+        mv.addObject("notice", notice);
+
+        mv.setViewName("board/noticeUpdate");
+
+        return mv;
+    }
+
+    // 공지사항 수정
+    @PostMapping("/notice/update")
+    public int updateNotice(NoticeDto notice)
+    {
+        int result = boardService.updateNotice(notice);
+
+        return result;
+    }
 }

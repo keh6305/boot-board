@@ -32,4 +32,10 @@
         VALUES
         (#{notice_title}, #{notice_content}, #{notice_status}, NOW(), NOW())
     </insert>
+
+    <!-- 공지사항 수정 -->
+    <update id="updateNotice" parameterType="NoticeDto">
+        UPDATE notice SET
+        notice_title = #{notice_title}, notice_content = #{notice_content}, notice_status = #{notice_status}, notice_modify_date = NOW()
+    </update>
 </mapper>

@@ -65,4 +65,13 @@ public class BoardServiceImpl implements BoardService
 
         return result;
     }
+
+    // 공지사항 수정
+    @Override
+    public int updateNotice(NoticeDto notice)
+    {
+        int result = boardMapper.updateNotice(notice);
+
+        return result;
+    }
 }

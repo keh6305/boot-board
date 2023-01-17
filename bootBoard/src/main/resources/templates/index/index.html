@@ -21,11 +21,12 @@
 						<h4>대시보드</h4>
 					</div>
 				</div>
-
+				<!--
 				<div class="row">
 					<span style="padding-left: 5px"><input type="date"></span>
 					<span style="padding-left: 20px"><input type="date"></span>
 				</div>
+				-->
 
 				<div style="padding-top: 30px" class="row">
 					<div class="col-md-3 col-sm-6 col-6 equel-grid">
@@ -51,8 +52,55 @@
 							</div>
 						</div>
 					</div>
-				</div>
 
+					<div class="col-md-3 col-sm-6 col-6 equel-grid">
+						<div class="grid">
+							<div class="grid-body text-gray">
+								<div class="d-flex justify-content-between">
+									<p>예약 진행 수</p>
+								</div>
+								<div class="d-flex justify-content-between">
+									<p>진행 예정 수</p>
+								</div>
+								<div class="d-flex justify-content-between">
+									<p>현재 진행 수</p>
+								</div>
+								<div class="d-flex justify-content-between">
+									<p>진행 완료 수</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-5 col-md-6 col-sm-12 equel-grid">
+						<div class="grid table-responsive">
+							<div style="height:80%">
+								<table class="table table-stretched">
+									<h1 class="card-title" style="margin:3% 0 3% 3%;">공지 사항</h1>
+									<thead>
+										<tr>
+											<th>번호</th>
+											<th>제목</th>
+											<th>작성일</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="notice, index : ${notice.list}">
+											<td th:text="${index.count}"></td>
+											<td th:text="${notice.notice_title}"></td>
+											<td th:text="${notice.notice_create_date}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+<!--							<div style="text-align:center;">-->
+<!--								<th:block th:each="pageNum : ${#numbers.sequence(1, page.end_page)}">-->
+<!--									<button th:text="${pageNum}" th:if="${pageNum != 0}" th:onclick="|SelectQnA(${pageNum})|" style="border:0px; background:none;"></button>-->
+<!--								</th:block>-->
+<!--							</div>-->
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -1,9 +1,11 @@
 package com.bootBoard.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 
-@Data
+@Getter
+@ToString
 @Alias("Notice")
 public class Notice
 {

@@ -1,14 +1,15 @@
 package com.bootBoard.entity;
 
-
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@Data
+@Getter
+@ToString
 @Alias("User")
 public class User implements UserDetails
 {

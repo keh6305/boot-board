@@ -1,5 +1,6 @@
 package com.bootBoard.controller;
 
+import com.bootBoard.dto.AreaDto;
 import com.bootBoard.dto.TechDto;
 import com.bootBoard.service.ManagementService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -50,20 +52,7 @@ public class ManagementController
     @PostMapping("/tech")
     public int insertTech(@RequestParam("tech") String tech)
     {
-        int check = managementService.selectTech(tech);
-
-        int result = 0;
-
-        if(check == 0)
-        {
-            result = managementService.insertTech(tech);
-        }
-        else
-        {
-            result = 9;
-        }
-
-        return result;
+        return managementService.insertTech(tech);
     }
 
     @PutMapping("/tech")
@@ -76,5 +65,43 @@ public class ManagementController
     public int deleteTech(@RequestParam("tech_id") int tech_id)
     {
         return managementService.deleteTech(tech_id);
+    }
+
+    @RequestMapping("/areaList")
+    public ModelAndView areaList(ModelAndView mv)
+    {
+        List<AreaDto> area = managementService.selectAreaList();
+
+        mv.addObject("parent", area);
+
+        mv.setViewName("management/areaList");
+
+        return mv;
+    }
+
+    @GetMapping("/area")
+    public Map<String, Object> searchArea(@RequestParam("keyword") String keyword, @RequestParam("parent") int parent, @RequestParam(defaultValue = "1", value = "page_num") int page_num, @RequestParam(defaultValue = "10", value = "limit") int limit)
+    {
+        Map<String, Object> result = managementService.searchArea(keyword, parent, page_num, limit);
+
+        return result;
+    }
+
+    @PostMapping("/area")
+    public int insertArea(AreaDto area)
+    {
+        return managementService.insertArea(area);
+    }
+
+    @PutMapping("/area")
+    public int updateArea(AreaDto area)
+    {
+        return managementService.updateArea(area);
+    }
+
+    @DeleteMapping("/area")
+    public int deleteArea(@RequestParam("area_id") int area_id)
+    {
+        return managementService.deleteArea(area_id);
     }
 }

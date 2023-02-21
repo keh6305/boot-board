@@ -11,15 +11,17 @@
 
     <!--기술 검색 -->
     <select id="searchTech" resultType="TechDto">
-        SELECT tech_id, tech FROM tech
+        SELECT
+            tech_id, tech
+        FROM tech
         <if test="keyword != ''">
             WHERE tech LIKE CONCAT ('%', #{keyword} , '%')
         </if>
         LIMIT #{offset}, #{limit}
     </select>
 
-    <!-- 기술 조회 -->
-    <select id="selectTech" parameterType="String" resultType="int">
+    <!-- 기술 여부 조회 -->
+    <select id="selectTechCheck" parameterType="String" resultType="int">
         SELECT COUNT(*) FROM tech
         WHERE tech = #{tech}
     </select>
@@ -43,5 +45,80 @@
     <delete id="deleteTech" parameterType="int">
         DELETE FROM tech
         WHERE tech_id = #{tech_id}
+    </delete>
+
+    <!-- 지역 목록 조회 -->
+    <select id="selectAreaList" resultType="AreaDto">
+        SELECT
+            area_id, area
+        FROM area
+        WHERE area_parent = 0
+    </select>
+
+    <!-- 지역 갯수 검색 -->
+    <select id="searchAreaCount" resultType="int">
+        SELECT COUNT(*) FROM area
+        <where>
+            <choose>
+                <when test="parent == 0">
+                    AND area_parent != 0
+                </when>
+                <otherwise>
+                    AND area_parent = #{parent}
+                </otherwise>
+            </choose>
+            <if test="keyword != ''">
+                AND area LIKE CONCAT ('%', #{keyword} , '%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 지역 검색 -->
+    <select id="searchArea" resultType="AreaDto">
+        SELECT
+            a1.area_id, a1.area, a1.area_parent, a2.area AS parent_name
+        FROM area a1
+        LEFT JOIN area a2 ON a1.area_parent = a2.area_id
+        <where>
+            <choose>
+                <when test="parent == 0">
+                    AND a1.area_parent != 0
+                </when>
+                <otherwise>
+                    AND a1.area_parent = #{parent}
+                </otherwise>
+            </choose>
+            <if test="keyword != ''">
+                AND a1.area LIKE CONCAT ('%', #{keyword} , '%')
+            </if>
+        </where>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 지역 여부 조회 -->
+    <select id="selectAreaCheck" parameterType="AreaDto" resultType="int">
+        SELECT COUNT(*) FROM area
+        WHERE area_parent = #{area_parent} AND area LIKE CONCAT ('%', #{area}, '%')
+    </select>
+
+    <!-- 지역 등록 -->
+    <insert id="insertArea" parameterType="AreaDto">
+        INSERT INTO area
+        (area, area_parent)
+        VALUES
+        (#{area}, #{area_parent})
+    </insert>
+
+    <!-- 지역 수정 -->
+    <update id="updateArea" parameterType="AreaDto">
+        UPDATE area
+        SET area = #{area}, area_parent = #{area_parent}
+        WHERE area_id = #{area_id}
+    </update>
+
+    <!-- 지역 삭제 -->
+    <delete id="deleteArea" parameterType="int">
+        DELETE FROM area
+        WHERE area_id = #{area_id}
     </delete>
 </mapper>

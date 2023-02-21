@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bootBoard.mapper.ManagementMapper">
+    <!-- 기술 갯수 검색 -->
+    <select id="searchTechCount" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM tech
+        <if test="keyword != ''">
+            WHERE tech LIKE CONCAT ('%', #{keyword} , '%')
+        </if>
+    </select>
+
+    <!--기술 검색 -->
+    <select id="searchTech" resultType="TechDto">
+        SELECT tech_id, tech FROM tech
+        <if test="keyword != ''">
+            WHERE tech LIKE CONCAT ('%', #{keyword} , '%')
+        </if>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 기술 조회 -->
+    <select id="selectTech" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM tech
+        WHERE tech = #{tech}
+    </select>
+
+    <!-- 기술 등록 -->
+    <insert id="insertTech" parameterType="String">
+        INSERT INTO tech
+        (tech)
+        VALUES
+        (#{tech})
+    </insert>
+
+    <!-- 기술 수정 -->
+    <update id="updateTech" parameterType="TechDto">
+        UPDATE tech
+        SET tech = #{tech}
+        WHERE tech_id = #{tech_id}
+    </update>
+
+    <!-- 기술 삭제 -->
+    <delete id="deleteTech" parameterType="int">
+        DELETE FROM tech
+        WHERE tech_id = #{tech_id}
+    </delete>
+</mapper>

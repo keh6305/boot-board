@@ -35,22 +35,29 @@
 			<div id="content-viewport">
 				<div class="row">
 					<div class="col-12" style="margin-bottom: 15px; display: flex; justify-content: space-between;">
-						<h4>기술 관리</h4>
+						<h4>지역 관리</h4>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-12">
 						<div class="col-12">
 							<div class="grid">
-								<p class="grid-header">기술 등록</p>
+								<p class="grid-header">지역 등록</p>
 								<div class="grid-body">
 									<div class="item-wrapper">
 										<div class="table-responsive">
 											<table class="table table-bordered" style="width: 100%; cellspacing: '0'; margin: auto;">
 												<tbody>
 													<tr>
-														<td style="width: 150px;">기술명</td>
-														<td><input type="text" class="form-control" id="tech" name="tech"></td>
+														<td style="width: 150px;">지역명</td>
+														<td style="width: 200px;">
+															<select class="form-control" id="parent">
+																<th:block th:each="parent : ${parent}">
+																	<option th:text="${parent.area}" th:value="${parent.area_id}"></option>
+																</th:block>
+															</select>
+														</td>
+														<td><input type="text" class="form-control" id="area" name="area"></td>
 													</tr>
 												</tbody>
 											</table>
@@ -62,7 +69,7 @@
 								</div>
 							</div>
 							<div class="grid" id="grid-width">
-								<p class="grid-header">기술 목록</p>
+								<p class="grid-header">지역 목록</p>
 								<div class="grid-body">
 									<div class="item-wrapper">
 										<div class="table-responsive">
@@ -70,6 +77,14 @@
 												<tbody>
 													<tr>
 														<td style="width: 150px;">검색어</td>
+														<td style="width: 200px;">
+															<select class="form-control" id="search_parent">
+																<option value="0">전국</option>
+																<th:block th:each="parent : ${parent}">
+																	<option th:text="${parent.area}" th:value="${parent.area_id}"></option>
+																</th:block>
+															</select>
+														</td>
 														<td><input type="text" class="form-control" id="keyword" name="keyword"></td>
 														<td style="width: 100px; text-align: center;"><button class="btn btn-sm btn-secondary" onclick="SearchBtn()">검색</button></td>
 													</tr>
@@ -95,7 +110,8 @@
 												<tbody>
 													<tr>
 														<td style="width: 70px;">번호</td>
-														<td>기술명</td>
+														<td>지역명</td>
+														<td>지역명</td>
 														<td style="width: 150px; text-align: center;"></td>
 													</tr>
 												</tbody>
@@ -133,11 +149,11 @@
 	// 검색
 	function SearchBtn(e)
 	{
-		var data = {'keyword' : $("#keyword").val(), 'page_num' : e, 'limit' : $("#limit").val()};
+		var data = {'keyword' : $("#keyword").val(), 'parent' : $("#search_parent").val(), 'page_num' : e, 'limit' : $("#limit").val()};
 
 		$.ajax(
 		{
-			url: '/management/tech',
+			url: '/management/area',
 			method: 'GET',
 			dataType : 'json',
 			data : data,
@@ -155,6 +171,7 @@
 					item_add += '<td></td>';
 					item_add += '<td></td>';
 					item_add += '<td></td>';
+					item_add += '<td></td>';
 					item_add += '</tr>';
 				}
 				else
@@ -163,10 +180,11 @@
 					{
 						item_add += '<tr>';
 						item_add += '<td>' + (result.page.offset + i + 1) + '</td>';
-						item_add += '<td>' + result.list[i].tech + '</td>';
+						item_add += '<td>' + result.list[i].parent_name + '</td>';
+						item_add += '<td>' + result.list[i].area + '</td>';
 						item_add += '<td>';
-						item_add += '<button class="btn btn-sm btn-secondary" onclick="inputBtn(this, ' + result.list[i].tech_id + ')">수정</button>';
-						item_add += '<button class="btn btn-sm btn-warning" onclick="deleteBtn(' + result.list[i].tech_id + ')" style="margin-left: 5px;">삭제</button>';
+						item_add += '<button class="btn btn-sm btn-secondary" onclick="inputBtn(this, ' + result.list[i].area_id + ')">수정</button>';
+						item_add += '<button class="btn btn-sm btn-warning" onclick="deleteBtn(' + result.list[i].area_id + ')" style="margin-left: 5px;">삭제</button>';
 						item_add += '</td>';
 						item_add += '</tr>';
 					}
@@ -212,9 +230,9 @@
 	// 등록
 	function insertBtn()
 	{
-		if($("#tech").val() == "")
+		if($("#area").val() == "")
 		{
-			alert("기술명이 입력되지 않았습니다.");
+			alert("지역명이 입력되지 않았습니다.");
 		}
 		else
 		{
@@ -222,24 +240,24 @@
 			{
 				$.ajax(
 				{
-					url: '/management/tech',
+					url: '/management/area',
 					method: 'POST',
 					dataType : 'json',
-					data : {'tech' : $("#tech").val()},
+					data : {'area' : $("#area").val(), 'area_parent' : $("#parent").val()},
 					success: function (result)
 					{
 						if(result == 0)
 						{
-							alert("기술 등록에 실패하였습니다.");
+							alert("지역 등록에 실패하였습니다.");
 						}
 						else if(result == 9)
 						{
-							alert("동일한 기술이 등록되어 있습니다.");
+							alert("동일한 지역이 등록되어 있습니다.");
 						}
 						else
 						{
-							alert("기술이 등록되었습니다.");
-							$("#tech").val('');
+							alert("지역이 등록되었습니다.");
+							$("#area").val('');
 
 							SearchBtn(1);
 						}
@@ -264,19 +282,19 @@
 		{
 			$.ajax(
 			{
-				url: '/management/tech',
+				url: '/management/area',
 				method: 'DELETE',
 				dataType : 'json',
-				data : {'tech_id' : e},
+				data : {'area_id' : e},
 				success: function (result)
 				{
 					if(result == 0)
 					{
-						alert("기술 삭제에 실패하였습니다.");
+						alert("지역 삭제에 실패하였습니다.");
 					}
 					else
 					{
-						alert("기술이 삭제되었습니다.");
+						alert("지역이 삭제되었습니다.");
 
 						SearchBtn(1);
 					}
@@ -294,24 +312,44 @@
 	{
 		var updateBtn = e;
 		var cancelBtn = e.nextElementSibling;
-		var inputbox = e.parentNode.previousElementSibling;
+		var inputBox = e.parentNode.previousElementSibling;
+		var selectBox = e.parentNode.previousSibling.previousSibling;
+
+		var area = [[${parent}]];
+		var list = "";
+
+		list += '<select class="form-control">';
+		for(var i = 0; i < area.length; i++)
+		{
+			if(area[i].area == selectBox.innerHTML)
+			{
+				list += '<option value=' + area[i].area_id + ' selected>' + area[i].area + '</option>';
+			}
+			else
+			{
+				list += '<option value=' + area[i].area_id + '>' + area[i].area + '</option>';
+			}
+		}
+		list += '</select>';
 
 		updateBtn.innerHTML = "완료";
 		updateBtn.setAttribute('onclick', 'updateBtn(this, ' + id + ')');
 
 		cancelBtn.innerHTML = "취소";
-		cancelBtn.setAttribute('onclick', 'cancelBtn(this, "' + inputbox.innerHTML + '", ' + id + ')');
+		cancelBtn.setAttribute('onclick', 'cancelBtn(this, "' + selectBox.innerHTML + '", "' + inputBox.innerHTML + '", ' + id + ')');
 
-		inputbox.innerHTML = '<input type="text" class="form-control" value="' + inputbox.innerHTML + '">';
+		inputBox.innerHTML = '<input type="text" class="form-control" value="' + inputBox.innerHTML + '">';
+		selectBox.innerHTML = list;
 	}
 
 	// 수정
 	function updateBtn(e, id)
 	{
 		var updateBtn = e;
-		var inputbox = e.parentNode.previousElementSibling.firstChild;
+		var inputBox = e.parentNode.previousElementSibling.firstChild;
+		var selectBox = e.parentNode.previousSibling.previousSibling.firstChild;
 
-		if(inputbox.value == "")
+		if(inputBox.value == "")
 		{
 			alert("기술명이 입력되지 않았습니다.");
 		}
@@ -321,19 +359,19 @@
 			{
 				$.ajax(
 				{
-					url: '/management/tech',
+					url: '/management/area',
 					method: 'PUT',
 					dataType : 'json',
-					data : {'tech_id' : id, 'tech' : inputbox.value},
+					data : {'area_id' : id, 'area' : inputBox.value, 'area_parent' : selectBox.value},
 					success: function (result)
 					{
 						if(result == 0)
 						{
-							alert("기술 수정에 실패하였습니다.");
+							alert("지역 수정에 실패하였습니다.");
 						}
 						else
 						{
-							alert("기술이 수정되었습니다.");
+							alert("지역이 수정되었습니다.");
 
 							SearchBtn(1);
 						}
@@ -348,11 +386,12 @@
 	}
 
 	// 수정 취소
-	function cancelBtn(e, origin, id)
+	function cancelBtn(e, parent, child, id)
 	{
 		var cancelBtn = e;
 		var updateBtn = e.previousElementSibling;
-		var inputbox = e.parentNode.previousElementSibling;
+		var inputBox = e.parentNode.previousElementSibling;
+		var selectBox = e.parentNode.previousSibling.previousSibling;
 
 		updateBtn.innerHTML = "수정";
 		updateBtn.setAttribute('onclick', 'inputBtn(this, ' + id + ')');
@@ -360,7 +399,8 @@
 		cancelBtn.innerHTML = "삭제";
 		cancelBtn.setAttribute('onclick', 'deleteBtn(' + id + ')');
 
-		inputbox.innerHTML = origin;
+		selectBox.innerHTML = parent;
+		inputBox.innerHTML = child;
 	}
 
 	// 갯수 변경

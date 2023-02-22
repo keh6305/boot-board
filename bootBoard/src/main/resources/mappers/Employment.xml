@@ -20,7 +20,7 @@
     <!-- 회사 검색-->
     <select id="searchCompany" resultType="CompanyDto">
         SELECT
-            c.company_name, c.company_rating, c.company_detail_area,
+            c.company_id, c.company_name, c.company_rating, c.company_detail_area,
             a1.area AS main_area, a2.area AS sub_area
         FROM company c
         LEFT JOIN area a1 ON a1.area_id = c.company_main_area
@@ -53,17 +53,45 @@
         WHERE area_parent = #{area_parent}
     </select>
 
-    <!-- 기술 목록 조회 -->
-    <select id="selectTechList" resultType="TechDto">
-        SELECT tech_id, tech
-        FROM tech
+    <!-- 회사 상세 조회 -->
+    <select id="selectCompany" parameterType="int" resultType="CompanyDto">
+        SELECT
+            c.company_id, c.company_name, c.company_rating, c.company_welfare,
+            c.company_main_area, c.company_sub_area, c.company_detail_area,
+            c.company_create_date, c.company_modify_date,
+            a1.area AS main_area, a2.area AS sub_area
+        FROM company c
+        LEFT JOIN area a1 ON c.company_main_area = a1.area_id
+        LEFT JOIN area a2 ON c.company_sub_area = a2.area_id
+        WHERE c.company_id = #{company_id}
     </select>
 
-    <!-- 기술 등록 -->
+    <!-- 회사 등록 -->
     <insert id="insertCompany" parameterType="CompanyDto">
         INSERT INTO company
         (company_name, company_rating, company_introduce, company_welfare, company_main_area, company_sub_area, company_detail_area, company_create_date)
         VALUES
         (#{company_name}, #{company_rating}, #{company_introduce}, #{company_welfare}, #{company_main_area}, #{company_sub_area}, #{company_detail_area}, NOW())
     </insert>
+
+    <!-- 회사 수정 -->
+    <update id="updateCompany" parameterType="CompanyDto">
+        UPDATE company
+        SET
+            company_name = #{company_name},
+            company_rating = #{company_rating},
+            company_introduce = #{company_introduce},
+            company_welfare = #{company_welfare},
+            company_main_area = #{company_main_area},
+            company_sub_area = #{company_sub_area},
+            company_detail_area = #{company_detail_area},
+            company_modify_date = NOW()
+        WHERE company_id = #{company_id}
+    </update>
+
+    <!-- 기술 목록 조회 -->
+    <select id="selectTechList" resultType="TechDto">
+        SELECT tech_id, tech
+        FROM tech
+    </select>
 </mapper>

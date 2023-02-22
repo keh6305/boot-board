@@ -94,11 +94,11 @@
 											<table class="table table-bordered" id="dataTable" style="width: 100%; cellspacing: '0'; margin: auto;">
 												<tbody>
 													<tr>
-														<td>번호</td>
+														<td style="width: 100px;">번호</td>
 														<td>회사명</td>
-														<td>별점</td>
+														<td style="width: 100px;">별점</td>
 														<td>주소</td>
-														<td></td>
+														<td style="width: 100px;"></td>
 													</tr>
 												</tbody>
 												<tbody id="item_list">
@@ -169,7 +169,7 @@
 						item_add += '<td>' + result.list[i].company_name + '</td>';
 						item_add += '<td>' + result.list[i].company_rating + '</td>';
 						item_add += '<td>' + result.list[i].main_area + " " +result.list[i].sub_area + " " + result.list[i].company_detail_area + '</td>';
-						item_add += '<td>' + '<a href="/board/notice/detail/' + result.list[i].company_id + '"><button class="btn btn-sm btn-primary">세부사항</button></a>' + '</td>';
+						item_add += '<td>' + '<a href="/employment/company/detail/' + result.list[i].company_id + '"><button class="btn btn-sm btn-primary">세부사항</button></a>' + '</td>';
 						item_add += '</tr>';
 					}
 				}

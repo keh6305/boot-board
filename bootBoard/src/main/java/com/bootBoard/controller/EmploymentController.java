@@ -22,6 +22,7 @@ public class EmploymentController
     @Autowired
     private EmploymentService employmentService;
 
+    // 회사 목록 페이지
     @RequestMapping("/company/list")
     public ModelAndView companyList(ModelAndView mv)
     {
@@ -34,6 +35,7 @@ public class EmploymentController
         return mv;
     }
 
+    // 회사 검색
     @ResponseBody
     @GetMapping("/company/search")
     public Map<String, Object> searchCompany(SearchCompanyDto search, @RequestParam(defaultValue = "1", value = "page_num") int page_num, @RequestParam(defaultValue = "10", value = "limit") int limit)
@@ -43,6 +45,7 @@ public class EmploymentController
         return result;
     }
 
+    // 회사 등록 페이지
     @GetMapping("/company/insert")
     public ModelAndView companyInsert(ModelAndView mv)
     {
@@ -55,6 +58,7 @@ public class EmploymentController
         return mv;
     }
 
+    // 회사 등록
     @ResponseBody
     @PostMapping("/company/insert")
     public int insertCompany(CompanyDto company)
@@ -62,6 +66,45 @@ public class EmploymentController
         return employmentService.insertCompany(company);
     }
 
+    // 회사 상세 페이지
+    @GetMapping("/company/detail/{company_id}")
+    public ModelAndView companyDetail(ModelAndView mv, @PathVariable("company_id") int company_id)
+    {
+        CompanyDto company = employmentService.selectCompany(company_id);
+
+        mv.addObject("company", company);
+
+        mv.setViewName("company/companyDetail");
+
+        return mv;
+    }
+
+    // 회사 수정 페이지
+    @GetMapping("/company/update/{company_id}")
+    public ModelAndView companyUpdate(ModelAndView mv, @PathVariable("company_id") int company_id)
+    {
+        CompanyDto company = employmentService.selectCompany(company_id);
+        List<AreaDto> mainArea = employmentService.selectMainAreaList();
+        List<AreaDto> subArea = employmentService.selectSubAreaList(company.getCompany_main_area());
+
+        mv.addObject("company", company);
+        mv.addObject("mainArea", mainArea);
+        mv.addObject("subArea", subArea);
+
+        mv.setViewName("company/companyUpdate");
+
+        return mv;
+    }
+
+    // 회사 수정
+    @ResponseBody
+    @PutMapping("/company/update")
+    public int updateCompany(CompanyDto company)
+    {
+        return employmentService.updateCompany(company);
+    }
+
+    // 서브 지역 조회
     @ResponseBody
     @GetMapping("/company/subArea")
     public List<AreaDto> selectSubArea(@RequestParam("area_parent") int area_parent)

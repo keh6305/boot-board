@@ -39,7 +39,7 @@ public class EmploymentServiceImpl implements EmploymentService
         page.setOffset(offset);
         page.setLimit(limit);
 
-        List<TechDto> company = employmentMapper.searchCompany(search, offset, limit);
+        List<CompanyDto> company = employmentMapper.searchCompany(search, offset, limit);
 
         result.put("list", company);
         result.put("page", page);
@@ -61,17 +61,31 @@ public class EmploymentServiceImpl implements EmploymentService
         return employmentMapper.selectSubAreaList(area_parent);
     }
 
+    // 회사 상세 조회
+    @Override
+    public CompanyDto selectCompany(int company_id)
+    {
+        return employmentMapper.selectCompany(company_id);
+    }
+
+    // 회사 등록
+    @Override
+    public int insertCompany(CompanyDto company)
+    {
+        return employmentMapper.insertCompany(company);
+    }
+
+    // 회사 수정
+    @Override
+    public int updateCompany(CompanyDto company)
+    {
+        return employmentMapper.updateCompany(company);
+    }
+
     // 기술 목록 조회
     @Override
     public List<TechDto> selectTechList()
     {
         return employmentMapper.selectTechList();
-    }
-
-    // 기술 등록
-    @Override
-    public int insertCompany(CompanyDto company)
-    {
-        return employmentMapper.insertCompany(company);
     }
 }

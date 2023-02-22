@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user=${#authentication.principal}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Boot Board</title>
+    <link rel="stylesheet" href="/../assets/vendors/iconfonts/mdi/css/materialdesignicons.css">
+    <link rel="stylesheet" href="/../assets/css/shared/style.css">
+    <link rel="stylesheet" href="/../assets/css/demo_1/style.css">
+    <link rel="shortcut icon" href="/../asssets/images/favicon.ico"/>
+</head>
+<body class="header-fixed">
+<th:block th:include="/../common/header.html"></th:block>
+<div class="page-body">
+    <th:block th:include="/../common/sidebar.html"></th:block>
+    <div class="page-content-wrapper">
+        <div class="page-content-wrapper-inner">
+            <div id="content-viewport">
+                <div class="row">
+                    <div class="col-12" style="margin-bottom: 15px; display: flex; justify-content: space-between;">
+                        <h4>회사 수정</h4>
+                        <p class="text-gray">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="grid">
+                            <p class="grid-header">회사 수정</p>
+                            <div class="grid-body">
+                                <div class="item-wrapper">
+                                    <div class="table-responsive">
+                                        <form action="" id="insertForm" method="POST">
+                                            <table class="table table-bordered" id="dataTable" style="width: 95%; cellspacing: '0'; margin: auto;">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>회사명</td>
+                                                        <td><input type="text" class="form-control" id="company_name" name="company_name" th:value="${company.company_name}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>별점</td>
+                                                        <td><input type="text" class="form-control" id="company_rating" name="company_rating" th:value="${company.company_rating}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>주소</td>
+                                                        <td>
+                                                            <select class="form-control" id="company_main_area" name="company_main_area" style="width: 10%; margin-right: 10px;">
+                                                                <th:block th:each="mainArea : ${mainArea}">
+                                                                    <option th:text="${mainArea.area}" th:value="${mainArea.area_id}" th:selected="${company.company_main_area} == ${mainArea.area_id}"></option>
+                                                                </th:block>
+                                                            </select>
+                                                            <select class="form-control" id="company_sub_area" name="company_sub_area" style="width: 10%; margin-right: 10px;">
+                                                                <th:block th:each="subArea : ${subArea}">
+                                                                    <option th:text="${subArea.area}" th:value="${subArea.area_id}" th:selected="${company.company_sub_area} == ${subArea.area_id}"></option>
+                                                                </th:block>
+                                                            </select>
+                                                            <input type="text" class="form-control" id="company_detail_area" name="company_detail_area" th:value="${company.company_detail_area}" style="width: 77.5%;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>회사 소개</td>
+                                                        <td><textarea class="form-control" name="company_introduce" th:text="${company.company_introduce}" style="width: 100%; height: 300px;"></textarea></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>회사 복지</td>
+                                                        <td><textarea class="form-control" name="company_welfare" th:text="${company.company_welfare}" style="width: 100%; height: 300px;"></textarea></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>등록일자</td>
+                                                        <td th:text="${company.company_create_date}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>수정일자</td>
+                                                        <td th:text="${company.company_modify_date}"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="mx-auto" style="text-align: center; margin-top: 10px;">
+                                                <button type="button" class="search_btn btn btn-primary" onclick="updateBtn();">수정</button>
+                                            </div>
+                                            <input type="hidden" id="company_id" name="company_id" th:value="${company.company_id}">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="/../common/footer.html"></th:block>
+<script src="/assets/vendors/js/core.js"></script>
+<script src="/assets/vendors/apexcharts/apexcharts.min.js"></script>
+<script src="/assets/vendors/chartjs/Chart.min.js"></script>
+<script src="/assets/js/charts/chartjs.addon.js"></script>
+<script src="/assets/js/template.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script th:inline="javascript">
+    function updateBtn()
+    {
+        var company = [[${company}]];
+
+        if($("#company_name").val() == "")
+        {
+            alert("회사명을 입력해주세요.");
+        }
+        else
+        {
+            var data = new FormData($("#insertForm")[0]);
+
+            $.ajax(
+            {
+                url: "/employment/company/update",
+                method : "PUT",
+                data : data,
+                cache : false,
+                contentType : false,
+                processData : false,
+                success: function(result)
+                {
+                    if(result == 0)
+                    {
+                        alert("회사 수정에 실패하였습니다.");
+                    }
+                    else
+                    {
+                       alert("회사가 수정되었습니다.");
+
+                        location.href = "/employment/company/detail/" + company.company_id;
+                    }
+                },
+                error(e)
+                {
+                    console.log(e);
+                }
+            })
+        }
+    }
+
+    $("#company_main_area").change(function()
+    {
+        $.ajax(
+        {
+            url: '/employment/company/subArea',
+            method: 'GET',
+            dataType : 'json',
+            data : {'area_parent' : $("#company_main_area").val()},
+            success: function (result)
+            {
+                var list_add = "";
+
+                list_add += '<option value="0">지역 선택</option>';
+                for(var i = 0; i < result.length; i++)
+                {
+                    list_add += '<option value="' + result[i].area_id + '">' + result[i].area + '</option>';
+                }
+
+                $("#company_sub_area").empty();
+                $("#company_sub_area").append(list_add);
+            },
+            error(e)
+            {
+                console.log(e);
+            }
+        });
+    })
+</script>
+</body>
+</html>

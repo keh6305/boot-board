@@ -16,7 +16,7 @@ public interface EmploymentMapper
     int searchCompanyCount(SearchCompanyDto search);
 
     // 회사 검색
-    List<TechDto> searchCompany(@Param("search") SearchCompanyDto search, @Param("offset") int offset, @Param("limit") int limit);
+    List<CompanyDto> searchCompany(@Param("search") SearchCompanyDto search, @Param("offset") int offset, @Param("limit") int limit);
 
     // 메인 지역 목록 조회
     List<AreaDto> selectMainAreaList();
@@ -24,9 +24,15 @@ public interface EmploymentMapper
     // 서브 지역 목록 조회
     List<AreaDto> selectSubAreaList(int area_parent);
 
+    // 회사 상세 조사
+    CompanyDto selectCompany(int company_id);
+
+    // 회사 등록
+    int insertCompany(CompanyDto company);
+
+    // 회사 수정
+    int updateCompany(CompanyDto company);
+
     // 기술 목록 조회
     List<TechDto> selectTechList();
-
-    // 기술 등록
-    int insertCompany(CompanyDto company);
 }

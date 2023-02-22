@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Lazy;
 @Alias("Company")
 public class Company
 {
-    private long company_id;                        // 회사 PK
+    private int company_id;                        // 회사 PK
     private String company_name;                    // 회사명
     private double company_rating;                  // 회사 별점
     private String company_introduce;               // 회사 소개

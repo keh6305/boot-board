@@ -66,8 +66,6 @@ public class UserController
     @PostMapping("/update")
     public int updateUser(UserUpdateDto user)
     {
-        int result = userService.updateUser(user);
-
-        return result;
+        return userService.updateUser(user);
     }
 }

@@ -13,26 +13,24 @@
             </if>
             <if test="keyword != ''">
                 AND
+                (
                 <choose>
                     <when test="keytype == 0">
-                        user_id LIKE CONCAT ('%', #{user_id}, '%') OR
-                        user_login_id LIKE CONCAT ('%', #{user_login_id}, '%') OR
-                        user_name LIKE CONCAT ('%', #{user_name}, '%') OR
-                        user_nickname LIKE CONCAT ('%', #{user_nickname}, '%')
+                        user_login_id LIKE CONCAT ('%', #{keyword}, '%') OR
+                        user_name LIKE CONCAT ('%', #{keyword}, '%') OR
+                        user_nickname LIKE CONCAT ('%', #{keyword}, '%')
                     </when>
                     <when test="keytype == 1">
-                        user_id LIKE CONCAT ('%', #{user_id}, '%')
+                        user_login_id LIKE CONCAT ('%', #{keyword}, '%')
                     </when>
                     <when test="keytype == 2">
-                        user_login_id LIKE CONCAT ('%', #{user_login_id}, '%')
+                        user_name LIKE CONCAT ('%', #{keyword}, '%')
                     </when>
                     <when test="keytype == 3">
-                        user_name LIKE CONCAT ('%', #{user_name}, '%')
-                    </when>
-                    <when test="keytype == 4">
-                        user_nickname LIKE CONCAT ('%', #{user_nickname}, '%')
+                        user_nickname LIKE CONCAT ('%', #{keyword}, '%')
                     </when>
                 </choose>
+                )
             </if>
         </where>
     </select>
@@ -49,26 +47,24 @@
             </if>
             <if test="keyword != ''">
                 AND
+                 (
                 <choose>
                     <when test="keytype == 0">
-                        user_id LIKE CONCAT ('%', #{user_id}, '%') OR
-                        user_login_id LIKE CONCAT ('%', #{user_login_id}, '%') OR
-                        user_name LIKE CONCAT ('%', #{user_name}, '%') OR
-                        user_nickname LIKE CONCAT ('%', #{user_nickname}, '%')
+                        user_login_id LIKE CONCAT ('%', #{keyword}, '%') OR
+                        user_name LIKE CONCAT ('%', #{keyword}, '%') OR
+                        user_nickname LIKE CONCAT ('%', #{keyword}, '%')
                     </when>
                     <when test="keytype == 1">
-                        user_id LIKE CONCAT ('%', #{user_id}, '%')
+                        user_login_id LIKE CONCAT ('%', #{keyword}, '%')
                     </when>
                     <when test="keytype == 2">
-                        user_login_id LIKE CONCAT ('%', #{user_login_id}, '%')
+                        user_name LIKE CONCAT ('%', #{keyword}, '%')
                     </when>
                     <when test="keytype == 3">
-                        user_name LIKE CONCAT ('%', #{user_name}, '%')
-                    </when>
-                    <when test="keytype == 4">
-                        user_nickname LIKE CONCAT ('%', #{user_nickname}, '%')
+                        user_nickname LIKE CONCAT ('%', #{keyword}, '%')
                     </when>
                 </choose>
+                 )
             </if>
         </where>
         ORDER BY user_id DESC

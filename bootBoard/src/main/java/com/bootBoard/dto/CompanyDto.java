@@ -1,14 +1,11 @@
-package com.bootBoard.entity;
+package com.bootBoard.dto;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 import org.apache.ibatis.type.Alias;
-import org.springframework.context.annotation.Lazy;
 
-@Getter
-@ToString
-@Alias("Company")
-public class Company
+@Data
+@Alias("CompanyDto")
+public class CompanyDto
 {
     private long company_id;                        // 회사 PK
     private String company_name;                    // 회사명
@@ -20,4 +17,7 @@ public class Company
     private String company_detail_area;             // 회사 상세 주소
     private String company_create_date;             // 등록일자
     private String company_modify_date;             // 수정일자
+
+    private String main_area;
+    private String sub_area;
 }

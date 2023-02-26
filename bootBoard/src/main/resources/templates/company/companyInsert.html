@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-12" style="margin-bottom: 15px; display: flex; justify-content: space-between;">
                         <!-- Page Heading -->
-                        <h4>공지사항 등록</h4>
+                        <h4>회사 등록</h4>
                         <p class="text-gray">
                         </p>
                     </div>
@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="grid">
-                            <p class="grid-header">공지사항 등록</p>
+                            <p class="grid-header">회사 등록</p>
                             <div class="grid-body">
                                 <div class="item-wrapper">
                                     <div class="table-responsive">
@@ -40,36 +40,41 @@
                                             <table class="table table-bordered" id="dataTable" style="width: 95%; cellspacing: '0'; margin: auto;">
                                                 <tbody>
                                                     <tr>
-                                                        <td>제목</td>
-                                                        <td><input type="text" class="form-control" id="notice_title" name="notice_title" th:value="${notice.notice_title}"></td>
+                                                        <td>회사명</td>
+                                                        <td><input type="text" class="form-control" id="company_name" name="company_name"></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>내용</td>
-                                                        <td><textarea class="form-control" name="notice_content" th:text="${notice.notice_content}" style="width: 100%; height: 500px;"></textarea></td>
+                                                        <td>회사 별점</td>
+                                                        <td><input type="number" class="form-control" id="company_rating" name="company_rating" min="0.0" max="5.0" value="0.0" step="0.1" style="width: 100px;"></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>공개 여부</td>
+                                                        <td>회사 소개</td>
+                                                        <td><textarea class="form-control" name="company_introduce" style="width: 100%; height: 300px;"></textarea></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>회사 복지</td>
+                                                        <td><textarea class="form-control" name="company_welfare" style="width: 100%; height: 300px;"></textarea></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>회사 주소</td>
                                                         <td>
-                                                            <input type="radio" id="status1" name="notice_status" value="0" th:checked="${notice.notice_status == 0}">
-                                                            <label for="status1">미공개</label>
-                                                            <input type="radio" id="status2" name="notice_status" value="1" th:checked="${notice.notice_status == 1}">
-                                                            <label for="status2">공개</label>
+                                                            <select class="form-control" id="company_main_area" name="company_main_area" style="width: 150px;">
+                                                                <option value="0">지역 선택</option>
+                                                                <th:block th:each="mainArea : ${mainArea}">
+                                                                    <option th:text="${mainArea.area}" th:value="${mainArea.area_id}"></option>
+                                                                </th:block>
+                                                            </select>
+                                                            <select class="form-control" id="company_sub_area" name="company_sub_area" style="width: 150px;">
+                                                                <option value="0">지역 선택</option>
+                                                            </select>
+                                                            <input type="text" class="form-control" id="company_detail_area" name="company_detail_area" style="width: 1000px;">
                                                         </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>등록일</td>
-                                                        <td th:text="${notice.notice_create_date}"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>수정일</td>
-                                                        <td th:text="${notice.notice_modify_date}"></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             <div class="mx-auto" style="text-align: center; margin-top: 10px;">
-                                                <button type="button" class="search_btn btn btn-primary" onclick="updateBtn();">수정</button>
+                                                <button type="button" class="search_btn btn btn-primary" onclick="insertBtn();">등록</button>
                                             </div>
-                                            <input type="hidden" id="notice_id" name="notice_id" th:value="${notice.notice_id}">
                                         </form>
                                     </div>
                                 </div>
@@ -91,13 +96,39 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script th:inline="javascript">
-    function updateBtn()
+    $("#company_main_area").change(function()
     {
-        var notice = [[${notice}]];
-
-        if($("#notice_title").val() == "")
+        $.ajax(
         {
-            alert("제목을 입력해주세요.");
+            url: '/employment/company/subArea',
+            method: 'GET',
+            dataType : 'json',
+            data : {'area_parent' : $("#company_main_area").val()},
+            success: function (result)
+            {
+                var list_add = "";
+
+                list_add += '<option value="0">지역 선택</option>';
+                for(var i = 0; i < result.length; i++)
+                {
+                    list_add += '<option value="' + result[i].area_id + '">' + result[i].area + '</option>';
+                }
+
+                $("#company_sub_area").empty();
+                $("#company_sub_area").append(list_add);
+            },
+            error(e)
+            {
+                console.log(e);
+            }
+        });
+    })
+
+    function insertBtn()
+    {
+        if($("#company_name").val() == "")
+        {
+            alert("회사명을 입력해주세요.");
         }
         else
         {
@@ -105,8 +136,8 @@
 
             $.ajax(
             {
-                url: "/board/notice/update",
-                method : "PUT",
+                url: "/employment/company/insert",
+                method : "POST",
                 data : data,
                 cache : false,
                 contentType : false,
@@ -115,20 +146,20 @@
                 {
                     if(result == 0)
                     {
-                        alert("공지사항 수정에 실패하였습니다.");
+                        alert("회사 등록에 실패하였습니다.");
                     }
                     else
                     {
-                       alert("공지사항이 수정되었습니다.");
+                        alert("회사가 등록되었습니다.");
 
-                        location.href = "/board/notice/detail/" + notice.notice_id;
+                        location.href = "/employment/company/list";
                     }
                 },
                 error(e)
                 {
                     console.log(e);
                 }
-            })
+            });
         }
     }
 </script>

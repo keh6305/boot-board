@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-12" style="margin-bottom: 15px; display: flex; justify-content: space-between;">
                         <!-- Page Heading -->
-                        <h4>공지사항 등록</h4>
+                        <h4>회사 상세</h4>
                         <p class="text-gray">
                         </p>
                     </div>
@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="grid">
-                            <p class="grid-header">공지사항 등록</p>
+                            <p class="grid-header">회사 상세</p>
                             <div class="grid-body">
                                 <div class="item-wrapper">
                                     <div class="table-responsive">
@@ -40,26 +40,37 @@
                                             <table class="table table-bordered" id="dataTable" style="width: 95%; cellspacing: '0'; margin: auto;">
                                                 <tbody>
                                                 <tr>
-                                                    <td>제목</td>
-                                                    <td><input type="text" class="form-control" id="notice_title" name="notice_title"></td>
+                                                    <td>회사명</td>
+                                                    <td th:text="${company.company_name}"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>내용</td>
-                                                    <td><textarea class="form-control" name="notice_content" style="width: 100%; height: 500px;"></textarea></td>
+                                                    <td>별점</td>
+                                                    <td th:text="${company.company_rating}"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>공개 여부</td>
-                                                    <td>
-                                                        <input type="radio" id="status1" name="notice_status" value="0" checked>
-                                                        <label for="status1">미공개</label>
-                                                        <input type="radio" id="status2" name="notice_status" value="1">
-                                                        <label for="status2">공개</label>
-                                                    </td>
+                                                    <td>주소</td>
+                                                    <td th:text="|${company.main_area} ${company.sub_area} ${company.company_detail_area}|"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>회사 소개</td>
+                                                    <td><textarea class="form-control" th:text="${company.company_introduce}" style="width: 100%; height: 300px;" readonly></textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>회사 복지</td>
+                                                    <td><textarea class="form-control" th:text="${company.company_welfare}" style="width: 100%; height: 300px;" readonly></textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>등록일자</td>
+                                                    <td th:text="${company.company_create_date}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>수정일자</td>
+                                                    <td th:text="${company.company_modify_date}"></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            <div class="mx-auto" style="text-align: center; margin-top: 10px;">
-                                                <button type="button" class="search_btn btn btn-primary" onclick="insertBtn();">등록</button>
+                                            <div class="mx-auto" th:if="${user.user_type != 2}" style="text-align: center; margin-top: 10px;">
+                                                <a class="search_btn btn btn-primary" th:href="|/employment/company/update/${company.company_id}|">수정</a>
                                             </div>
                                         </form>
                                     </div>
@@ -82,44 +93,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script th:inline="javascript">
-    function insertBtn()
-    {
-        if($("#notice_title").val() == "")
-        {
-            alert("제목을 입력해주세요.");
-        }
-        else
-        {
-            var data = new FormData($("#insertForm")[0]);
 
-            $.ajax(
-            {
-                url: "/board/notice/insert",
-                method : "POST",
-                data : data,
-                cache : false,
-                contentType : false,
-                processData : false,
-                success: function(result)
-                {
-                    if(result == 0)
-                    {
-                        alert("공지사항 등록에 실패하였습니다.");
-                    }
-                    else
-                    {
-                        alert("공지사항이 등록되었습니다.");
-
-                        location.href = "/board/notice/list";
-                    }
-                },
-                error(e)
-                {
-                    console.log(e);
-                }
-            })
-        }
-    }
 </script>
 </body>
 </html>

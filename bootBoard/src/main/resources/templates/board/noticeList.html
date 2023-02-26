@@ -141,7 +141,7 @@
 					for(var i = 0; i < result.list.length; i++)
 					{
 						item_add += '<tr>';
-						item_add += '<td>' + result.list[i].notice_id + '</td>';
+						item_add += '<td>' + (result.page.offset + i + 1) + '</td>';
 						item_add += '<td>' + result.list[i].notice_title + '</td>';
 
 						if(user.user_type != 2)

@@ -82,7 +82,7 @@ public class BoardController
     }
 
     // 공지사항 수정
-    @PostMapping("/notice/update")
+    @PutMapping("/notice/update")
     public int updateNotice(NoticeDto notice)
     {
         int result = boardService.updateNotice(notice);

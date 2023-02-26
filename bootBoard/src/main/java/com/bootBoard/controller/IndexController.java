@@ -30,8 +30,6 @@ public class IndexController
     {
         Map<String, Object> notice = indexService.selectNoticeList();          // 공지사항 목록 조회
 
-        System.out.println("notice = " + notice);
-
         mv.addObject("notice", notice);
 
         mv.setViewName("index/index");

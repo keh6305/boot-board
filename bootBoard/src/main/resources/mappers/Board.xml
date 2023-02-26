@@ -35,7 +35,9 @@
 
     <!-- 공지사항 수정 -->
     <update id="updateNotice" parameterType="NoticeDto">
-        UPDATE notice SET
-        notice_title = #{notice_title}, notice_content = #{notice_content}, notice_status = #{notice_status}, notice_modify_date = NOW()
+        UPDATE notice
+        SET
+            notice_title = #{notice_title}, notice_content = #{notice_content}, notice_status = #{notice_status}, notice_modify_date = NOW()
+        WHERE notice_id = #{notice_id}
     </update>
 </mapper>

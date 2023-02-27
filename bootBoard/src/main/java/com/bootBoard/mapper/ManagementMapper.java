@@ -1,6 +1,7 @@
 package com.bootBoard.mapper;
 
 import com.bootBoard.dto.AreaDto;
+import com.bootBoard.dto.SiteDto;
 import com.bootBoard.dto.TechDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -48,4 +49,22 @@ public interface ManagementMapper
 
     // 지역 삭제
     int deleteArea(int area_id);
+
+    // 사이트 갯수 검색
+    int searchSiteCount(String keyword);
+
+    // 사이트 검색
+    List<SiteDto> searchSite(@Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit);
+
+    // 사이트 여부 조회
+    int selectSiteCheck(String site);
+
+    // 사이트 등록
+    int insertSite(String site);
+
+    // 사이트 수정
+    int updateSite(SiteDto site);
+
+    // 사이트 삭제
+    int deleteSite(int site_id);
 }

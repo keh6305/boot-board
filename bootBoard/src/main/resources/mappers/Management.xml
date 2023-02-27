@@ -9,7 +9,7 @@
         </if>
     </select>
 
-    <!--기술 검색 -->
+    <!-- 기술 검색 -->
     <select id="searchTech" resultType="TechDto">
         SELECT
             tech_id, tech
@@ -120,5 +120,51 @@
     <delete id="deleteArea" parameterType="int">
         DELETE FROM area
         WHERE area_id = #{area_id}
+    </delete>
+
+    <!-- 사이트 갯수 검색 -->
+    <select id="searchSiteCount" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM site
+        <if test="keyword != ''">
+            WHERE site LIKE CONCAT ('%', #{keyword} , '%')
+        </if>
+    </select>
+
+    <!-- 사이트 검색 -->
+    <select id="searchSite" resultType="SiteDto">
+        SELECT
+            site_id, site
+        FROM site
+        <if test="keyword != ''">
+            WHERE site LIKE CONCAT ('%', #{keyword} , '%')
+        </if>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 사이트 여부 조회 -->
+    <select id="selectSiteCheck" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM site
+        WHERE site = #{site}
+    </select>
+
+    <!-- 사이트 등록 -->
+    <insert id="insertSite" parameterType="String">
+        INSERT INTO site
+        (site)
+        VALUES
+        (#{site})
+    </insert>
+
+    <!-- 사이트 수정 -->
+    <update id="updateSite" parameterType="SiteDto">
+        UPDATE site
+        SET site = #{site}
+        WHERE site_id = #{site_id}
+    </update>
+
+    <!-- 사이트 삭제 -->
+    <delete id="deleteSite" parameterType="int">
+        DELETE FROM site
+        WHERE site_id = #{site_id}
     </delete>
 </mapper>

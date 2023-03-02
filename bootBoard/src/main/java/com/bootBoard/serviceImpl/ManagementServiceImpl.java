@@ -2,6 +2,7 @@ package com.bootBoard.serviceImpl;
 
 import com.bootBoard.dto.AreaDto;
 import com.bootBoard.dto.Pagination;
+import com.bootBoard.dto.SiteDto;
 import com.bootBoard.dto.TechDto;
 import com.bootBoard.mapper.ManagementMapper;
 import com.bootBoard.service.ManagementService;
@@ -151,5 +152,68 @@ public class ManagementServiceImpl implements ManagementService
     public int deleteArea(int area_id)
     {
         return managementMapper.deleteArea(area_id);
+    }
+
+    // 사이트 검색
+    @Override
+    public Map<String, Object> searchSite(String keyword, int page_num, int limit)
+    {
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        int count = managementMapper.searchSiteCount(keyword);
+
+        int offset = (page_num - 1) * limit;
+        int start_page = ((page_num - 1) / 10) * 10 + 1;
+        int max_page = (count + limit - 1) / limit;
+
+        Pagination page = new Pagination();
+        page.setCount(count);
+        page.setPage_num(page_num);
+        page.setStart_page(start_page);
+        page.setEnd_page(start_page + 9);
+        page.setMax_page(max_page);
+        page.setOffset(offset);
+        page.setLimit(limit);
+
+        List<SiteDto> site = managementMapper.searchSite(keyword, offset, limit);
+
+        result.put("list", site);
+        result.put("page", page);
+
+        return result;
+    }
+
+    // 사이트 등록
+    @Override
+    public int insertSite(String site)
+    {
+        int check = managementMapper.selectSiteCheck(site);
+
+        int result = 0;
+
+        if(check == 0)
+        {
+            result = managementMapper.insertSite(site);
+        }
+        else
+        {
+            result = 9;
+        }
+
+        return result;
+    }
+
+    // 사이트 수정
+    @Override
+    public int updateSite(SiteDto site)
+    {
+        return managementMapper.updateSite(site);
+    }
+
+    // 사이트 삭제
+    @Override
+    public int deleteSite(int site_id)
+    {
+        return managementMapper.deleteSite(site_id);
     }
 }

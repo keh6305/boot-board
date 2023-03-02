@@ -56,7 +56,7 @@
     <!-- 회사 상세 조회 -->
     <select id="selectCompany" parameterType="int" resultType="CompanyDto">
         SELECT
-            c.company_id, c.company_name, c.company_rating, c.company_welfare,
+            c.company_id, c.company_name, c.company_rating, c.company_welfare, c.company_introduce,
             c.company_main_area, c.company_sub_area, c.company_detail_area,
             c.company_create_date, c.company_modify_date,
             a1.area AS main_area, a2.area AS sub_area
@@ -89,9 +89,97 @@
         WHERE company_id = #{company_id}
     </update>
 
+    <!-- 사이트 목록 조회-->
+    <select id="selectSiteList" resultType="SiteDto">
+        SELECT
+            site_id, site
+        FROM site
+    </select>
+
+    <!-- 공고 개수 검색 -->
+    <select id="searchRecruitmentCount" parameterType="SearchRecruitmentDto" resultType="int">
+        SELECT COUNT(*) FROM recruitment
+        <where>
+            <if test="site_id != 0">
+                AND site_id = #{site_id}
+            </if>
+            <if test="recruitment_status != 9">
+                AND recruitment_status = #{recruitment_status}
+            </if>
+            <if test="recruitment_type != 9">
+                AND recruitment_type = #{recruitment_type}
+            </if>
+            <if test="min_career != 0">
+                <![CDATA[ AND #{min_career} <= recruitment_career ]]>
+            </if>
+            <if test="max_career != 0">
+                <![CDATA[ AND recruitment_career <= #{max_career} ]]>
+            </if>
+            <if test="recruitment_start_date != ''">
+                <![CDATA[ AND #{recruitment_start_date} <= recruitment_start_date ]]>
+            </if>
+            <if test="recruitment_end_date != ''">
+                <![CDATA[ AND recruitment_end_date <= #{recruitment_end_date} ]]>
+            </if>
+            <if test="keyword != ''">
+                AND company_name LIKE CONCAT ('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 공고 목록 검색-->
+    <select id="searchRecruitment" resultType="RecruitmentDto">
+        SELECT
+            r.recruitment_id, r.recruitment_url, r.recruitment_career, r.recruitment_type, r.recruitment_status,
+            r.recruitment_start_date, r.recruitment_end_date, r.recruitment_create_date,
+            r.company_id, c.company_name, r.site_id, s.site
+        FROM recruitment r
+        LEFT JOIN company c ON r.company_id = c.company_id
+        LEFT JOIN site s ON r.site_id = s.site_id
+        <where>
+            <if test="search.site_id != 0">
+                AND r.site_id = #{search.site_id}
+            </if>
+            <if test="search.recruitment_status != 9">
+                AND r.recruitment_status = #{search.recruitment_status}
+            </if>
+            <if test="search.recruitment_type != 9">
+                AND r.recruitment_type = #{search.recruitment_type}
+            </if>
+            <if test="search.min_career != 0">
+                <![CDATA[ AND #{search.min_career} <= r.recruitment_career ]]>
+            </if>
+            <if test="search.max_career != 0">
+                <![CDATA[ AND r.recruitment_career <= #{search.max_career} ]]>
+            </if>
+            <if test="search.recruitment_start_date != ''">
+                <![CDATA[ AND #{search.recruitment_start_date} <= r.recruitment_start_date ]]>
+            </if>
+            <if test="search.recruitment_end_date != ''">
+                <![CDATA[ AND r.recruitment_end_date <= #{search.recruitment_end_date} ]]>
+            </if>
+            <if test="search.keyword != ''">
+                AND r.company_name LIKE CONCAT ('%', #{search.keyword}, '%')
+            </if>
+        </where>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 공고 등록 -->
+    <insert id="insertRecruitment" parameterType="RecruitmentDto">
+        INSERT INTO recruitment
+        (company_id, site_id, recruitment_url, recruitment_career, recruitment_qualification, recruitment_work, recruitment_preferential,
+         recruitment_status, recruitment_type, recruitment_salary, recruitment_compensation, recruitment_start_date, recruitment_end_date, recruitment_create_date)
+        VALUES
+        (#{company_id}, #{site_id}, #{recruitment_url}, #{recruitment_career}, #{recruitment_qualification}, #{recruitment_work}, #{recruitment_preferential},
+         #{recruitment_status}, #{recruitment_type}, #{recruitment_salary}, #{recruitment_compensation}, #{recruitment_start_date}, #{recruitment_end_date}, NOW())
+        <selectKey resultType="int" keyProperty="recruitment_id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
     <!-- 기술 목록 조회 -->
     <select id="selectTechList" resultType="TechDto">
-        SELECT tech_id, tech
-        FROM tech
+        SELECT tech_id, tech FROM tech
     </select>
 </mapper>

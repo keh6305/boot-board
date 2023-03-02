@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="user=${#authentication.principal}">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Boot Board</title>
+	<link rel="stylesheet" href="/assets/vendors/iconfonts/mdi/css/materialdesignicons.css">
+	<link rel="stylesheet" href="/assets/css/shared/style.css">
+	<link rel="stylesheet" href="/assets/css/demo_1/style.css">
+	<link rel="shortcut icon" href="/asssets/images/favicon.ico"/>
+	<style type="text/css">
+		.current {
+			border: 1px solid;
+			background: #696ffb;
+			color: #FFFFFF;
+			margin-right: 3px;
+			border-radius: 4px;
+			width: 3%;
+		}
+		.paging {
+			border: 1px solid #f2f4f9;
+			background: #FFFFFF;
+			margin-right: 3px;
+			border-radius: 4px;
+			width: 3%;
+		}
+	</style>
+</head>
+<body class="header-fixed">
+<th:block th:include="/../common/header.html"></th:block>
+<div class="page-body">
+	<th:block th:include="/../common/sidebar.html"></th:block>
+	<div class="page-content-wrapper">
+		<div class="page-content-wrapper-inner">
+			<div id="content-viewport">
+				<div class="row">
+					<div class="col-12" style="margin-bottom: 15px; display: flex; justify-content: space-between;">
+						<h4>사이트 관리</h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						<div class="col-12">
+							<div class="grid">
+								<p class="grid-header">사이트 등록</p>
+								<div class="grid-body">
+									<div class="item-wrapper">
+										<div class="table-responsive">
+											<table class="table table-bordered" style="width: 100%; cellspacing: '0'; margin: auto;">
+												<tbody>
+													<tr>
+														<td style="width: 150px;">사이트명</td>
+														<td><input type="text" class="form-control" id="site" name="site"></td>
+													</tr>
+												</tbody>
+											</table>
+											<div style="text-align:center; margin: 2% 0 0 0;">
+												<button class="btn btn-sm btn-secondary" onclick="insertBtn()">등록</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="grid" id="grid-width">
+								<p class="grid-header">사이트 목록</p>
+								<div class="grid-body">
+									<div class="item-wrapper">
+										<div class="table-responsive">
+											<table class="table table-bordered" style="width: 100%; cellspacing: '0'; margin: auto;">
+												<tbody>
+													<tr>
+														<td style="width: 150px;">검색어</td>
+														<td><input type="text" class="form-control" id="keyword" name="keyword"></td>
+														<td style="width: 100px; text-align: center;"><button class="btn btn-sm btn-secondary" onclick="SearchBtn()">검색</button></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="grid-body">
+									<div class="item-wrapper">
+										<div class="table-responsive">
+											<div style="float: right; margin-bottom: 5px;">
+												<select class="form-control" id="limit">
+													<option value="5">5</option>
+													<option value="10" selected>10</option>
+													<option value="15">15</option>
+													<option value="20">20</option>
+													<option value="30">30</option>
+													<option value="50">50</option>
+												</select>
+											</div>
+											<table class="table table-bordered" id="dataTable" style="width: 100%; cellspacing: '0'; margin: auto;">
+												<tbody>
+													<tr>
+														<td style="width: 70px;">번호</td>
+														<td>사이트명</td>
+														<td style="width: 150px; text-align: center;"></td>
+													</tr>
+												</tbody>
+												<tbody id="item_list">
+												</tbody>
+											</table>
+											<div id="page_list" style="text-align:center; margin: 2% 0 0 0;">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<th:block th:include="/../common/footer.html"></th:block>
+<script src="/assets/vendors/js/core.js"></script>
+<script src="/assets/vendors/apexcharts/apexcharts.min.js"></script>
+<script src="/assets/vendors/chartjs/Chart.min.js"></script>
+<script src="/assets/js/charts/chartjs.addon.js"></script>
+<script src="/assets/js/template.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script th:inline="javascript">
+	$(document).ready(function()
+	{
+		SearchBtn(1);
+	});
+
+	// 검색
+	function SearchBtn(e)
+	{
+		var data = {'keyword' : $("#keyword").val(), 'page_num' : e, 'limit' : $("#limit").val()};
+
+		$.ajax(
+		{
+			url: '/management/site',
+			method: 'GET',
+			dataType : 'json',
+			data : data,
+			success: function (result)
+			{
+				var item_list = $("#item_list");
+				var item_add = "";
+				var page_list = $("#page_list");
+				var page_add = "";
+
+				// list start
+				if (result.list.length == 0)
+				{
+					item_add += '<tr>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '</tr>';
+				}
+				else
+				{
+					for(var i = 0; i < result.list.length; i++)
+					{
+						item_add += '<tr>';
+						item_add += '<td>' + (result.page.offset + i + 1) + '</td>';
+						item_add += '<td>' + result.list[i].site + '</td>';
+						item_add += '<td>';
+						item_add += '<button class="btn btn-sm btn-secondary" onclick="inputBtn(this, ' + result.list[i].site_id + ')">수정</button>';
+						item_add += '<button class="btn btn-sm btn-warning" onclick="deleteBtn(' + result.list[i].site_id + ')" style="margin-left: 5px;">삭제</button>';
+						item_add += '</td>';
+						item_add += '</tr>';
+					}
+				}
+				// list end
+
+				// paging start
+				if (result.page.page_num > 10)
+				{
+					page_add += '<button class="paging" onclick="SearchBtn(' + (result.page.start_page - 10) + ')"><</button>';
+				}
+
+				for (var i = result.page.start_page; i < (result.page.end_page + 1); i++)
+				{
+					if (result.page.page_num == i)
+					{
+						page_add += '<button class="current" onclick="SearchBtn(' + i + ')">' + i + '</button>';
+					}
+					else if (i <= result.page.max_page)
+					{
+						page_add += '<button class="paging" onclick="SearchBtn(' + i + ')">' + i + '</button>';
+					}
+				}
+
+				if (result.page.start_page + 10 < (result.page.max_page))
+				{
+					page_add += '<button class="paging" onclick="SearchBtn(' + (result.page.start_page + 10) + ')">></button>';
+				}
+				// paging end
+
+				item_list.empty();
+				item_list.append(item_add);
+				page_list.empty();
+				page_list.append(page_add);
+			},
+			error(e)
+			{
+				console.log(e);
+			}
+		})
+	}
+
+	// 등록
+	function insertBtn()
+	{
+		if($("#site").val() == "")
+		{
+			alert("사이트명이 입력되지 않았습니다.");
+		}
+		else
+		{
+			if(confirm("등록하시겠습니까?"))
+			{
+				$.ajax(
+				{
+					url: '/management/site',
+					method: 'POST',
+					dataType : 'json',
+					data : {'site' : $("#site").val()},
+					success: function (result)
+					{
+						if(result == 0)
+						{
+							alert("사이트 등록에 실패하였습니다.");
+						}
+						else if(result == 9)
+						{
+							alert("동일한 사이트가 등록되어 있습니다.");
+						}
+						else
+						{
+							alert("사이트가 등록되었습니다.");
+
+							$("#site").val('');
+
+							SearchBtn(1);
+						}
+					},
+					error(e)
+					{
+						console.log(e);
+					}
+				})
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+
+	// 삭제
+	function deleteBtn(e)
+	{
+		if(confirm("정말로 삭제하시겠습니까?"))
+		{
+			$.ajax(
+			{
+				url: '/management/site',
+				method: 'DELETE',
+				dataType : 'json',
+				data : {'site_id' : e},
+				success: function (result)
+				{
+					if(result == 0)
+					{
+						alert("사이트 삭제에 실패하였습니다.");
+					}
+					else
+					{
+						alert("사이트가 삭제되었습니다.");
+
+						SearchBtn(1);
+					}
+				},
+				error(e)
+				{
+					console.log(e);
+				}
+			})
+		}
+	}
+
+	// 수정 준비
+	function inputBtn(e, id)
+	{
+		var updateBtn = e;
+		var cancelBtn = e.nextElementSibling;
+		var inputbox = e.parentNode.previousElementSibling;
+
+		updateBtn.innerHTML = "완료";
+		updateBtn.setAttribute('onclick', 'updateBtn(this, ' + id + ')');
+
+		cancelBtn.innerHTML = "취소";
+		cancelBtn.setAttribute('onclick', 'cancelBtn(this, "' + inputbox.innerHTML + '", ' + id + ')');
+
+		inputbox.innerHTML = '<input type="text" class="form-control" value="' + inputbox.innerHTML + '">';
+	}
+
+	// 수정
+	function updateBtn(e, id)
+	{
+		var updateBtn = e;
+		var inputbox = e.parentNode.previousElementSibling.firstChild;
+
+		if(inputbox.value == "")
+		{
+			alert("기술명이 입력되지 않았습니다.");
+		}
+		else
+		{
+			if(confirm("수정하시겠습니까?"))
+			{
+				$.ajax(
+				{
+					url: '/management/site',
+					method: 'PUT',
+					dataType : 'json',
+					data : {'site_id' : id, 'site' : inputbox.value},
+					success: function (result)
+					{
+						if(result == 0)
+						{
+							alert("사이트 수정에 실패하였습니다.");
+						}
+						else
+						{
+							alert("사이트가 수정되었습니다.");
+
+							SearchBtn(1);
+						}
+					},
+					error(e)
+					{
+						console.log(e);
+					}
+				})
+			}
+		}
+	}
+
+	// 수정 취소
+	function cancelBtn(e, origin, id)
+	{
+		var cancelBtn = e;
+		var updateBtn = e.previousElementSibling;
+		var inputbox = e.parentNode.previousElementSibling;
+
+		updateBtn.innerHTML = "수정";
+		updateBtn.setAttribute('onclick', 'inputBtn(this, ' + id + ')');
+
+		cancelBtn.innerHTML = "삭제";
+		cancelBtn.setAttribute('onclick', 'deleteBtn(' + id + ')');
+
+		inputbox.innerHTML = origin;
+	}
+
+	// 갯수 변경
+	$("#limit").change(function()
+	{
+		SearchBtn(1);
+	})
+</script>
+</body>
+</html>

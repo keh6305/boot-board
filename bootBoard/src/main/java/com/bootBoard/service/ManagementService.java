@@ -1,6 +1,7 @@
 package com.bootBoard.service;
 
 import com.bootBoard.dto.AreaDto;
+import com.bootBoard.dto.SiteDto;
 import com.bootBoard.dto.TechDto;
 
 import java.util.List;
@@ -34,4 +35,16 @@ public interface ManagementService
 
     // 지역 삭제
     int deleteArea(int area_id);
+
+    // 사이트 검색
+    Map<String, Object> searchSite(String keyword, int page_num, int limit);
+
+    // 사이트 등록
+    int insertSite(String site);
+
+    // 사이트 수정
+    int updateSite(SiteDto site);
+
+    // 사이트 삭제
+    int deleteSite(int site_id);
 }

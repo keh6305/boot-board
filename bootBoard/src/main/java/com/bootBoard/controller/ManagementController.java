@@ -1,6 +1,7 @@
 package com.bootBoard.controller;
 
 import com.bootBoard.dto.AreaDto;
+import com.bootBoard.dto.SiteDto;
 import com.bootBoard.dto.TechDto;
 import com.bootBoard.service.ManagementService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class ManagementController
     private ManagementService managementService;
 
     // 기술 관리 페이지
-    @RequestMapping("/techList")
+    @RequestMapping("/tech/list")
     public ModelAndView techList(ModelAndView mv)
     {
         mv.setViewName("management/techList");
@@ -67,7 +68,7 @@ public class ManagementController
         return managementService.deleteTech(tech_id);
     }
 
-    @RequestMapping("/areaList")
+    @RequestMapping("/area/list")
     public ModelAndView areaList(ModelAndView mv)
     {
         List<AreaDto> area = managementService.selectAreaList();
@@ -103,5 +104,39 @@ public class ManagementController
     public int deleteArea(@RequestParam("area_id") int area_id)
     {
         return managementService.deleteArea(area_id);
+    }
+
+    @RequestMapping("/site/list")
+    public ModelAndView siteList(ModelAndView mv)
+    {
+        mv.setViewName("management/siteList");
+
+        return mv;
+    }
+
+    @GetMapping("/site")
+    public Map<String, Object> searchSite(@RequestParam("keyword") String keyword, @RequestParam(defaultValue = "1", value = "page_num") int page_num, @RequestParam(defaultValue = "10", value = "limit") int limit)
+    {
+        Map<String, Object> result = managementService.searchSite(keyword, page_num, limit);
+
+        return result;
+    }
+
+    @PostMapping("/site")
+    public int insertSite(@RequestParam("site") String site)
+    {
+        return managementService.insertSite(site);
+    }
+
+    @PutMapping("/site")
+    public int updateSite(SiteDto site)
+    {
+        return managementService.updateSite(site);
+    }
+
+    @DeleteMapping("/site")
+    public int deleteSite(@RequestParam("site_id") int site_id)
+    {
+        return managementService.deleteSite(site_id);
     }
 }

@@ -1,13 +1,11 @@
-package com.bootBoard.entity;
+package com.bootBoard.dto;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
-@Getter
-@ToString
-@Alias("Recruitment")
-public class Recruitment
+@Data
+@Alias("RecruitmentDto")
+public class RecruitmentDto
 {
     private int recruitment_id;                             // 공고 PK
     private int company_id;                                 // 회사 PK
@@ -25,4 +23,7 @@ public class Recruitment
     private String recruitment_end_date;                    // 공고 마감일
     private String recruitment_create_date;                 // 공고 등록일
     private String recruitment_modify_date;                 // 공고 수정일
+
+    private String company_name;
+    private String site;
 }

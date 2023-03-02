@@ -1,9 +1,6 @@
 package com.bootBoard.mapper;
 
-import com.bootBoard.dto.AreaDto;
-import com.bootBoard.dto.CompanyDto;
-import com.bootBoard.dto.SearchCompanyDto;
-import com.bootBoard.dto.TechDto;
+import com.bootBoard.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,6 +29,18 @@ public interface EmploymentMapper
 
     // 회사 수정
     int updateCompany(CompanyDto company);
+
+    // 공고 개수 검색
+    int searchRecruitmentCount(SearchRecruitmentDto recruitment);
+
+    // 공고 목록 검색
+    List<RecruitmentDto> searchRecruitment(@Param("search") SearchRecruitmentDto search, @Param("offset") int offset, @Param("limit") int limit);
+
+    // 사이트 목록 조회
+    List<SiteDto> selectSiteList();
+
+    // 공고 등록
+    int insertRecruitment(RecruitmentDto recruitment);
 
     // 기술 목록 조회
     List<TechDto> selectTechList();

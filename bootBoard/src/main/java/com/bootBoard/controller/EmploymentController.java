@@ -1,9 +1,6 @@
 package com.bootBoard.controller;
 
-import com.bootBoard.dto.AreaDto;
-import com.bootBoard.dto.CompanyDto;
-import com.bootBoard.dto.SearchCompanyDto;
-import com.bootBoard.dto.TechDto;
+import com.bootBoard.dto.*;
 import com.bootBoard.service.EmploymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,8 +81,9 @@ public class EmploymentController
     public ModelAndView companyUpdate(ModelAndView mv, @PathVariable("company_id") int company_id)
     {
         CompanyDto company = employmentService.selectCompany(company_id);
-        List<AreaDto> mainArea = employmentService.selectMainAreaList();
-        List<AreaDto> subArea = employmentService.selectSubAreaList(company.getCompany_main_area());
+
+        List<AreaDto> mainArea = employmentService.selectMainAreaList();                                        // 메인 지역 목록 조회
+        List<AreaDto> subArea = employmentService.selectSubAreaList(company.getCompany_main_area());            // 서브 지역 목록 조회
 
         mv.addObject("company", company);
         mv.addObject("mainArea", mainArea);
@@ -112,5 +110,62 @@ public class EmploymentController
         List<AreaDto> result = employmentService.selectSubAreaList(area_parent);
 
         return result;
+    }
+
+    // 공고 목록 페이지
+    @RequestMapping("/recruitment/list")
+    public ModelAndView recruitmentList(ModelAndView mv)
+    {
+        List<SiteDto> site = employmentService.selectSiteList();
+
+        mv.addObject("site", site);
+
+        mv.setViewName("recruitment/recruitmentList");
+
+        return mv;
+    }
+
+    // 공고 목록 검색
+    @ResponseBody
+    @GetMapping("/recruitment/search")
+    public Map<String, Object> searchRecruitment(SearchRecruitmentDto search, @RequestParam(defaultValue = "1", value = "page_num") int page_num, @RequestParam(defaultValue = "10", value = "limit") int limit)
+    {
+        Map<String, Object> result = employmentService.searchRecruitment(search, page_num, limit);
+
+        return result;
+    }
+
+    // 공고 등록 페이지
+    @GetMapping("/recruitment/insert/{company_id}")
+    public ModelAndView recruitmentInsert(ModelAndView mv, @PathVariable("company_id") int company_id)
+    {
+        CompanyDto company = employmentService.selectCompany(company_id);
+        List<SiteDto> site = employmentService.selectSiteList();
+
+        mv.addObject("company", company);
+        mv.addObject("site", site);
+
+        mv.setViewName("recruitment/recruitmentInsert");
+
+        return mv;
+    }
+
+    // 공고 등록
+    @ResponseBody
+    @PostMapping("/recruitment/insert")
+    public int insertRecruitment(RecruitmentDto recruitment)
+    {
+        return employmentService.insertRecruitment(recruitment);
+    }
+
+    // 절차 등록 페이지
+    @GetMapping("/procedure/insert/{recruitment_id}")
+    public ModelAndView procedureInsert(ModelAndView mv, @PathVariable("recruitment_id") int recruitment_id)
+    {
+
+
+        mv.setViewName("procedure/procedureInsert");
+
+        return mv;
     }
 }

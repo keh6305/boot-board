@@ -24,10 +24,6 @@
 			border-radius: 4px;
 			width: 3%;
 		}
-
-		.btn-sm {
-			margin: 3px;
-		}
 	</style>
 </head>
 <body class="header-fixed">
@@ -39,39 +35,56 @@
 			<div id="content-viewport">
 				<div class="row">
 					<div class="col-12" style="margin-bottom: 15px; display: flex; justify-content: space-between;">
-						<h4>회사 목록</h4>
+						<h4>공고 목록</h4>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-12">
 						<div class="col-12">
 							<div class="grid" id="">
-								<p class="grid-header">회사 검색</p>
+								<p class="grid-header">공고 검색</p>
 								<div class="grid-body">
 									<div class="item-wrapper">
 										<div class="table-responsive">
 											<table class="table table-bordered" style="width: 100%; cellspacing: '0'; margin: auto;">
 												<tbody>
 													<tr>
-														<td>별점</td>
+														<td>검색 조건</td>
 														<td>
-															<input type="number" class="form-control" id="min_rating" min="0.0" max="5.0" value="0.0" step="0.1" style="width: 150px;">
-															~
-															<input type="number" class="form-control" id="max_rating" min="0.0" max="5.0" value="5.0" step="0.1" style="width: 150px;">
+															<select class="form-control" id="site_id" name="site_id" style="width: 150px; margin-right: 10px;">
+																<option value="0">사이트 선택</option>
+																<th:block th:each="site : ${site}">
+																	<option th:text="${site.site}" th:value="${site.site_id}"></option>
+																</th:block>
+															</select>
+															<select class="form-control" id="recruitment_status" name="recruitment_status" style="width: 150px; margin-right: 10px;">
+																<option value="9">전체</option>
+																<option value="0">대기</option>
+																<option value="1">정상</option>
+																<option value="2">마감</option>
+															</select>
+															<select class="form-control" id="recruitment_type" name="recruitment_type" style="width: 150px; margin-right: 10px;">
+																<option value="9">전체</option>
+																<option value="0">정규직</option>
+																<option value="1">비정규직</option>
+																<option value="2">인턴</option>
+															</select>
 														</td>
 													</tr>
 													<tr>
-														<td>지역</td>
+														<td>경력 기간</td>
 														<td>
-															<select class="form-control" id="main_area" name="main_area" style="width: 150px; margin-right: 10px;">
-																<option value="0">지역 선택</option>
-																<th:block th:each="mainArea : ${mainArea}">
-																	<option th:text="${mainArea.area}" th:value="${mainArea.area_id}"></option>
-																</th:block>
-															</select>
-															<select class="form-control" id="sub_area" name="sub_area" style="width: 150px;">
-																<option value="0">지역 선택</option>
-															</select>
+															<input type="number" class="form-control" id="min_career" min="0" value="0" style="width: 150px;">
+															~
+															<input type="number" class="form-control" id="max_career" min="0" value="0" style="width: 150px;">
+														</td>
+													</tr>
+													<tr>
+														<td>공고 기간</td>
+														<td>
+															<input type="date" class="form-control" id="recruitment_start_date" style="width: 150px;">
+															~
+															<input type="date" class="form-control" id="recruitment_end_date" style="width: 150px;">
 														</td>
 													</tr>
 													<tr>
@@ -90,8 +103,8 @@
 						</div>
 						<div class="col-12">
 							<div class="grid" id="grid-width">
-								<a class="btn btn-sm btn-secondary" href="/employment/company/insert" style="float: right; margin: 5px 10px 0 0;">등록</a>
-								<p class="grid-header">회사 목록</p>
+								<!-- <a class="btn btn-sm btn-secondary" href="/employment/company/insert" style="float: right; margin: 5px 10px 0 0;">등록</a> -->
+								<p class="grid-header">공고 목록</p>
 								<div class="grid-body">
 									<div class="item-wrapper">
 										<div class="table-responsive">
@@ -100,8 +113,13 @@
 													<tr>
 														<td style="width: 100px;">번호</td>
 														<td>회사명</td>
-														<td style="width: 100px;">별점</td>
-														<td>주소</td>
+														<td>사이트명</td>
+														<td>경력</td>
+														<td>상태</td>
+														<td>유형</td>
+														<td>시작일</td>
+														<td>마감일</td>
+														<td>등록일</td>
 														<td style="width: 100px;"></td>
 													</tr>
 												</tbody>
@@ -138,11 +156,11 @@
 
 	function SearchBtn(e)
 	{
-		var data = {'min_rating' : $("#min_rating").val(), 'max_rating' : $("#max_rating").val(), 'main_area' : $("#main_area").val(), 'sub_area' : $("#sub_area").val(), 'keyword' : $("#keyword").val(), 'page_num': e};
+		var data = {'site_id' : $("#site_id").val(), 'recruitment_status' : $("#recruitment_status").val(), 'recruitment_type' : $("#recruitment_type").val(), 'min_career' : $("#min_career").val(), 'max_career' : $("#max_career").val(), 'recruitment_start_date' : $("#recruitment_start_date").val(), 'recruitment_end_date' : $("#recruitment_end_date").val(), 'keyword' : $("#keyword").val(), 'page_num': e};
 
 		$.ajax(
 		{
-			url: '/employment/company/search',
+			url: '/employment/recruitment/search',
 			method: 'GET',
 			dataType : 'json',
 			data : data,
@@ -162,6 +180,11 @@
 					item_add += '<td></td>';
 					item_add += '<td></td>';
 					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
+					item_add += '<td></td>';
 					item_add += '</tr>';
 				}
 				else
@@ -170,13 +193,33 @@
 					{
 						item_add += '<tr>';
 						item_add += '<td>' + (result.page.offset + i + 1) + '</td>';
-						item_add += '<td>' + result.list[i].company_name + '</td>';
-						item_add += '<td>' + result.list[i].company_rating + '</td>';
-						item_add += '<td>' + result.list[i].main_area + " " +result.list[i].sub_area + " " + result.list[i].company_detail_area + '</td>';
-						item_add += '<td>';
-						item_add += '<a href="/employment/recruitment/insert/' + result.list[i].company_id + '"><button class="btn btn-sm btn-secondary">공고 등록</button></a>';
-						item_add += '<a href="/employment/company/detail/' + result.list[i].company_id + '"><button class="btn btn-sm btn-primary">세부사항</button></a>';
-						item_add += '</td>';
+						item_add += '<td>' + '<a href="/employment/company/detail/' + result.list[i].company_id + '">' + result.list[i].company_name + '</a></td>';
+						item_add += '<td>' + '<a href="' + result.list[i].recruitment_url + '" target="_blank">' + result.list[i].site + '</a></td>';
+						item_add += '<td>' + result.list[i].recruitment_career + '</td>';
+
+						switch(result.list[i].recruitment_type)
+						{
+							case 0 : item_add += '<td>정규직</td>';
+							break;
+							case 1 : item_add += '<td>비정규직</td>';
+							break;
+							case 2 : item_add += '<td>인턴</td>';
+							break;
+						}
+						switch(result.list[i].recruitment_status)
+						{
+							case 0 : item_add += '<td>대기</td>';
+							break;
+							case 1 : item_add += '<td>정상</td>';
+							break;
+							case 2 : item_add += '<td>마감</td>';
+							break;
+						}
+
+						item_add += '<td>' + result.list[i].recruitment_start_date + '</td>';
+						item_add += '<td>' + result.list[i].recruitment_end_date + '</td>';
+						item_add += '<td>' + result.list[i].recruitment_create_date + '</td>';
+						item_add += '<td>' + '<a href="/employment/recruitment/detail/' + result.list[i].recruitment_id + '"><button class="btn btn-sm btn-primary">세부사항</button></a>' + '</td>';
 						item_add += '</tr>';
 					}
 				}
@@ -217,34 +260,6 @@
 			}
 		})
 	}
-
-	$("#company_main_area").change(function()
-	{
-		$.ajax(
-		{
-			url: '/employment/company/subArea',
-			method: 'GET',
-			dataType : 'json',
-			data : {'area_parent' : $("#company_main_area").val()},
-			success: function (result)
-			{
-				var list_add = "";
-
-				list_add += '<option value="0">지역 선택</option>';
-				for(var i = 0; i < result.length; i++)
-				{
-					list_add += '<option value="' + result[i].area_id + '">' + result[i].area + '</option>';
-				}
-
-				$("#company_sub_area").empty();
-				$("#company_sub_area").append(list_add);
-			},
-			error(e)
-			{
-				console.log(e);
-			}
-		});
-	})
 </script>
 </body>
 </html>

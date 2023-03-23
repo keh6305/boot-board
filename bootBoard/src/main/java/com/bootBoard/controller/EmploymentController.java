@@ -162,8 +162,6 @@ public class EmploymentController
     @GetMapping("/procedure/insert/{recruitment_id}")
     public ModelAndView procedureInsert(ModelAndView mv, @PathVariable("recruitment_id") int recruitment_id)
     {
-
-
         mv.setViewName("procedure/procedureInsert");
 
         return mv;

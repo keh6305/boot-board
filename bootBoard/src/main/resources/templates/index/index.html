@@ -71,7 +71,6 @@
 							</div>
 						</div>
 					</div>
-
 					<div class="col-lg-5 col-md-6 col-sm-12 equel-grid">
 						<div class="grid table-responsive">
 							<div style="height:80%">
@@ -100,6 +99,7 @@
 <!--							</div>-->
 						</div>
 					</div>
+					<input type="file" onchange="readExcel();">
 				</div>
 			</div>
 		</div>
@@ -120,5 +120,26 @@
 <script src="/assets/js/dashboard.js"></script>
 <!-- <script src="../js/chart_data.js"></script> -->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
+<script>
+	function readExcel()
+	{
+		let input = event.target;
+		let reader = new FileReader();
+
+		reader.onload = function ()
+		{
+			let data = reader.result;
+			// console.log(data);
+
+			let workBook = XLSX.read(data, {type:'binary', cellText:false, cellDates:true});
+
+			let rows = XLSX.utils.sheet_to_json(workBook.Sheets[workBook.SheetNames[0]], {raw:false, dateNF:'yyyy-mm-dd'});
+
+			console.log(rows);
+		};
+		reader.readAsBinaryString(input.files[0]);
+	}
+</script>
 </body>
 </html>
